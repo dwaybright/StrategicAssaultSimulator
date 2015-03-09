@@ -1,0 +1,11 @@
+Tiles for game background
+http://thehermitdesign.co.uk/blog/hermit-work/seamless-backgrounds/
+
+Tutorials on LibGDX
+http://www.gamefromscratch.com/post/2014/05/01/LibGDX-Tutorial-11-Tiled-Maps-Part-2-Adding-a-character-sprite.aspx
+
+Gimp
+http://www.gimp.org/
+
+Tiled
+http://www.mapeditor.org/
