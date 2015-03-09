@@ -24,21 +24,20 @@
 
  */
 
-package us.thirdmillenium.strategicassaultsimulator.android;
+package us.thirdmillenium.strategicassaultsimulator.ai;
 
-import android.os.Bundle;
-
-import com.badlogic.gdx.backends.android.AndroidApplication;
-import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import us.thirdmillenium.strategicassaultsimulator.StrategicAssaultSimulator;
+import com.badlogic.gdx.ai.pfa.Heuristic;
+import com.badlogic.gdx.math.Vector2;
 
 
-public class AndroidLauncher extends AndroidApplication {
+public class TileHeuristic implements Heuristic<TileNode> {
 
-	@Override
-	protected void onCreate (Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new StrategicAssaultSimulator(), config);
-	}
+    @Override
+    public float estimate(TileNode node, TileNode endNode) {
+        // Straight Line
+        Vector2 start = new Vector2(node.getCellX(), node.getCellY());
+        Vector2 end = new Vector2(endNode.getCellX(), node.getCellY());
+
+        return start.dst(end);
+    }
 }

@@ -24,21 +24,22 @@
 
  */
 
-package us.thirdmillenium.strategicassaultsimulator.android;
 
-import android.os.Bundle;
-
-import com.badlogic.gdx.backends.android.AndroidApplication;
-import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import us.thirdmillenium.strategicassaultsimulator.StrategicAssaultSimulator;
+package us.thirdmillenium.strategicassaultsimulator.agents;
 
 
-public class AndroidLauncher extends AndroidApplication {
+/**
+ * The AgentModel class is extended by all actual Agents to be made.
+ */
+public abstract class AgentModel {
 
-	@Override
-	protected void onCreate (Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-		initialize(new StrategicAssaultSimulator(), config);
-	}
+
+
+
+
+    public abstract void agentHit();
+
+    public abstract void updateAgentState();
+
+
 }
