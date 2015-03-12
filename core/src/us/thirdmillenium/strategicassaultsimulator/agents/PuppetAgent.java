@@ -115,7 +115,7 @@ public class PuppetAgent extends AgentModel {
     }
 
 
-    private GraphPath<TileNode> getPathToTouch(float goalX, float goalY) {
+    private GraphPath<TileNode> getPathToGoal(float goalX, float goalY) {
         // Generate Cell X and Y positions
         int numCellY = Gdx.graphics.getHeight() / this.TileSize;
 
@@ -143,7 +143,6 @@ public class PuppetAgent extends AgentModel {
         // Compute Path!
         //this.indexedPathFinder.searchConnectionPath(startNode, endNode, new TileHeuristic(), path);
         this.PathFinder.searchNodePath(startNode, endNode, new TileHeuristic(), this.CurrentPath);
-
 
         return path;
     }
