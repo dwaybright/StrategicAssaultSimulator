@@ -144,7 +144,7 @@ public class PuppetAgent extends AgentModel {
         //this.indexedPathFinder.searchConnectionPath(startNode, endNode, new TileHeuristic(), path);
         this.PathFinder.searchNodePath(startNode, endNode, new TileHeuristic(), this.CurrentPath);
 
-        return path;
+        return this.CurrentPath;
     }
 
     private TileNode findIndex(Integer index, HashMap<Integer, TileNode> nodeTracker) {
