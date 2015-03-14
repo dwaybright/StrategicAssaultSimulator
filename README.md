@@ -1,9 +1,7 @@
 # Strategic Assault Simulator
 An Android simulation game that relies on Neural Network controlled Agents, with extensive use of LibGDX (http://libgdx.badlogicgames.com/).
 
-The interface component branch is a code turn-in for class.  
-
-This interface component is a LibGDX window showing a level screen and a dot representing a character in the game.  In addition, a mapping of circles are overlayed which show tiles which a character could move.  Upon tapping the screen, a black line indicates the path returned by A* for how the character would move to where you tapped the screen.
+This branch builds the basic architecture for the entire simulation, and a testbed for running different neural networks.
 
 Example of an Agent created with Gimp (http://www.gimp.org/)
 
