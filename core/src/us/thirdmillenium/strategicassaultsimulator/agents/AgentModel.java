@@ -28,6 +28,9 @@
 package us.thirdmillenium.strategicassaultsimulator.agents;
 
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
 /**
  * The AgentModel class is extended by all actual Agents to be made.
  */
@@ -35,11 +38,11 @@ public abstract class AgentModel {
 
 
 
-
-
     public abstract void agentHit();
 
     public abstract void updateAgentState();
 
+    public abstract void drawAgent(SpriteBatch sb);
 
+    public abstract void drawLines(ShapeRenderer sr);
 }

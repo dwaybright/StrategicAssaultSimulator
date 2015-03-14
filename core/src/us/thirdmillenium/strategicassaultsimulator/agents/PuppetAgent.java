@@ -31,6 +31,8 @@ import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 import java.util.HashMap;
@@ -76,8 +78,7 @@ public class PuppetAgent extends AgentModel {
 
 
     public PuppetAgent(TiledMapTileLayer collisionLayer, HashMap<Integer, TileNode> mapNodes,
-                       TileAStarPathFinder pathFinder,
-                       int pixelX, int pixelY, int tileSize)
+                       TileAStarPathFinder pathFinder, int pixelX, int pixelY, int tileSize)
     {
         // Setup game world parameters
         this.CollisionLayer = collisionLayer;
@@ -111,6 +112,16 @@ public class PuppetAgent extends AgentModel {
 
     @Override
     public void updateAgentState() {
+
+    }
+
+    @Override
+    public void drawAgent(SpriteBatch sb) {
+
+    }
+
+    @Override
+    public void drawLines(ShapeRenderer sr) {
 
     }
 
