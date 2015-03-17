@@ -193,7 +193,9 @@ public class Environment implements InputProcessor{
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        ((PuppetAgent) this.myAgent).setPathToGoal(screenX, screenY);
+        float h = Gdx.graphics.getHeight();
+
+        ((PuppetAgent) this.myAgent).setPathToGoal(screenX, h - screenY);
 
         return true;
     }

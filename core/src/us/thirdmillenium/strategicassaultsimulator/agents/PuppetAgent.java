@@ -56,6 +56,7 @@ public class PuppetAgent extends AgentModel {
     private int TileSize;
     private HashMap<Integer, TileNode> MapNodes;
     private TileAStarPathFinder PathFinder;
+    private int AgentSize = 10;  // 20 x 20
 
     // Agent location
     private GraphPath<TileNode> CurrentPath;
@@ -69,6 +70,7 @@ public class PuppetAgent extends AgentModel {
     // Agent Physical Attributes
     private int Health;
     private float MovementSpeed;
+    private float MovementSpeedScalar;
     private float Eyesight;
     private float Hearing;
 
@@ -91,7 +93,7 @@ public class PuppetAgent extends AgentModel {
         this.PathFinder = pathFinder;
 
         // Setup Graphics
-        this.Alive = new Texture("goodGuyDot.png");
+        this.Alive = new Texture("goodGuyDotArrow.png");
         this.Dead = new Texture("deadDot.png");
         this.Sprite = new Sprite(Alive);
 
@@ -102,7 +104,8 @@ public class PuppetAgent extends AgentModel {
 
         // Set Basic Values
         this.Health = 50;
-        this.MovementSpeed = 10;
+        this.MovementSpeed = 50;
+        this.MovementSpeedScalar = 5;
         this.Eyesight = 10;
         this.Hearing = 20;
         this.Angle = 0;
@@ -138,13 +141,14 @@ public class PuppetAgent extends AgentModel {
         if( distance < this.MovementSpeed ) {
 
             if( this.CurrentPathIndex + 1 < this.CurrentPath.getCount() ) {
-                tempTile = this.CurrentPath.get(this.CurrentPathIndex + 1);
+                this.CurrentPathIndex++;
+                tempTile = this.CurrentPath.get(this.CurrentPathIndex);
                 nextPosition = tempTile.getPixelVector2();
             } else {
                 // We have arrived!
                 this.Pixel_X = nextPosition.x;
                 this.Pixel_Y = nextPosition.y;
-                this.Sprite.setPosition(this.Pixel_X, this.Pixel_Y);
+                this.Sprite.setPosition(this.Pixel_X - this.AgentSize, this.Pixel_Y - this.AgentSize);
 
                 // Clear Path
                 this.CurrentPath = null;
@@ -156,11 +160,11 @@ public class PuppetAgent extends AgentModel {
 
         // Update Position
         Vector2 direction = nextPosition.sub(currentPosition).nor();
-        direction.mulAdd(direction, this.MovementSpeed);
+        direction.mulAdd(direction, this.MovementSpeedScalar);
 
         this.Pixel_X += direction.x;
         this.Pixel_Y += direction.y;
-        this.Sprite.setPosition(this.Pixel_X, this.Pixel_Y);
+        this.Sprite.setPosition(this.Pixel_X - this.AgentSize, this.Pixel_Y - this.AgentSize);
     }
 
     @Override
@@ -215,8 +219,14 @@ public class PuppetAgent extends AgentModel {
         // The returned path once computed
         this.CurrentPath = new DefaultGraphPath<TileNode>();
 
-        // Compute Path!
-        this.PathFinder.searchNodePath(startNode, endNode, new TileHeuristic(), this.CurrentPath);
+        // Compute Path!  (TODO:  Find the NullPointer error)
+        try {
+            this.PathFinder.searchNodePath(startNode, endNode, new TileHeuristic(), this.CurrentPath);
+        } catch(Exception ex) {
+            //tring msg = ex.getMessage();
+        }
+
+        this.CurrentPath.reverse();
     }
 
     /**
