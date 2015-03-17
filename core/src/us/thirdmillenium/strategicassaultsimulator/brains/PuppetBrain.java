@@ -30,5 +30,10 @@ package us.thirdmillenium.strategicassaultsimulator.brains;
 
 public class PuppetBrain extends Brain {
 
+    public PuppetBrain() {
+
+    }
+
+
 
 }

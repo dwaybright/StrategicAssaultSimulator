@@ -187,12 +187,12 @@ public class TileAStarPathFinder implements PathFinder<TileNode> {
     private boolean returnNodePath(AStarTileNode lastNode, GraphPath<TileNode> outPath) {
         AStarTileNode walkBack = lastNode;
 
-        while( !walkBack.isFirstNode() ) {
+        while( walkBack != null && !walkBack.isFirstNode() ) {
             outPath.add(walkBack.getTileNode());
             walkBack = walkBack.getCameFrom();
         }
 
-        //outPath.reverse();
+        outPath.reverse();
 
         return true;
     }
