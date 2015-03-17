@@ -165,6 +165,10 @@ public class PuppetAgent extends AgentModel {
         this.Pixel_X += direction.x;
         this.Pixel_Y += direction.y;
         this.Sprite.setPosition(this.Pixel_X - this.AgentSize, this.Pixel_Y - this.AgentSize);
+
+        // Update Rotation
+        Vector2 unitVec = new Vector2(0,1);
+        this.Sprite.setRotation( unitVec.angle(direction));
     }
 
     @Override
@@ -220,13 +224,9 @@ public class PuppetAgent extends AgentModel {
         this.CurrentPath = new DefaultGraphPath<TileNode>();
 
         // Compute Path!  (TODO:  Find the NullPointer error)
-        try {
-            this.PathFinder.searchNodePath(startNode, endNode, new TileHeuristic(), this.CurrentPath);
-        } catch(Exception ex) {
-            //tring msg = ex.getMessage();
-        }
+        this.PathFinder.searchNodePath(startNode, endNode, new TileHeuristic(), this.CurrentPath);
 
-        this.CurrentPath.reverse();
+        //this.CurrentPath.reverse();
     }
 
     /**

@@ -107,10 +107,11 @@ public class Environment implements InputProcessor{
 
         // Generate TileMap Objects
         createGraphFromTileMap(w, h, tileSize);
+        this.PathFinder = new TileAStarPathFinder(this.TileNodeGraph);
 
         // Init Agents
         try {
-            this.myAgent = new PuppetAgent(this.TiledMap, this.TraverseNodes, this.PathFinder, 0, 0, 32);
+            this.myAgent = new PuppetAgent(this.TiledMap, this.TraverseNodes, this.PathFinder, 10, 10, 32);
         } catch( Exception ex ) {
             String msg = ex.getMessage();
         }
@@ -395,7 +396,6 @@ public class Environment implements InputProcessor{
             }
 
             this.TileNodeGraph = new DefaultIndexedGraph<TileNode>(myNodes);
-            this.PathFinder = new TileAStarPathFinder(this.TileNodeGraph);
 
         } catch(Exception ex)
         {
