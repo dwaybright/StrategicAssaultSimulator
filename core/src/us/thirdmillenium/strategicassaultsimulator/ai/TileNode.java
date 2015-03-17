@@ -28,6 +28,7 @@ package us.thirdmillenium.strategicassaultsimulator.ai;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedNode;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 
@@ -77,6 +78,8 @@ public class TileNode implements IndexedNode<TileNode>, Comparable<TileNode>  {
     public float getPixelY() {
         return this.Pixel_y;
     }
+
+    public Vector2 getPixelVector2(){ return new Vector2(this.Pixel_x, this.Pixel_y); }
 
     @Override
     public int getIndex() {

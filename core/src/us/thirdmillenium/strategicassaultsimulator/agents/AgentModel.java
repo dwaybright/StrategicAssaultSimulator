@@ -37,12 +37,31 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public abstract class AgentModel {
 
 
-
+    /**
+     * Tells the agent it was hit.
+     */
     public abstract void agentHit();
 
+
+    /**
+     * Has the Agent perform its updates.
+     */
     public abstract void updateAgentState();
 
+
+    /**
+     * Draws the Agent on the canvas.
+     *
+     * @param sb
+     */
     public abstract void drawAgent(SpriteBatch sb);
 
+
+    /**
+     * Allows the Agent to draw lines if it wants.
+     * Mostly a DEBUG feature?
+     *
+     * @param sr
+     */
     public abstract void drawLines(ShapeRenderer sr);
 }

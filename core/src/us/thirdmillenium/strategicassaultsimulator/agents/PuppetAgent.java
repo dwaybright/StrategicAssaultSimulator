@@ -33,10 +33,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.HashMap;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import us.thirdmillenium.strategicassaultsimulator.ai.TileAStarPathFinder;
 import us.thirdmillenium.strategicassaultsimulator.ai.TileHeuristic;
 import us.thirdmillenium.strategicassaultsimulator.ai.TileNode;
@@ -46,7 +49,7 @@ import us.thirdmillenium.strategicassaultsimulator.brains.PuppetBrain;
 
 public class PuppetAgent extends AgentModel {
     // Game World
-    private TiledMapTileLayer CollisionLayer;
+    private TiledMap MyTiledMap;
     private Sprite Sprite;
     private Texture Alive;
     private Texture Dead;
@@ -56,6 +59,7 @@ public class PuppetAgent extends AgentModel {
 
     // Agent location
     private GraphPath<TileNode> CurrentPath;
+    private int CurrentPathIndex;
     private float Pixel_X;
     private float Pixel_Y;
     private int Cell_X;
@@ -77,11 +81,11 @@ public class PuppetAgent extends AgentModel {
 
 
 
-    public PuppetAgent(TiledMapTileLayer collisionLayer, HashMap<Integer, TileNode> mapNodes,
+    public PuppetAgent(TiledMap myTiledMap, HashMap<Integer, TileNode> mapNodes,
                        TileAStarPathFinder pathFinder, int pixelX, int pixelY, int tileSize)
     {
         // Setup game world parameters
-        this.CollisionLayer = collisionLayer;
+        this.MyTiledMap = myTiledMap;
         this.TileSize = tileSize;
         this.MapNodes = mapNodes;
         this.PathFinder = pathFinder;
@@ -92,11 +96,13 @@ public class PuppetAgent extends AgentModel {
         this.Sprite = new Sprite(Alive);
 
         // Setup Start Location
-
+        this.CurrentPathIndex = -1;
+        this.Pixel_X = pixelX;
+        this.Pixel_Y = pixelY;
 
         // Set Basic Values
         this.Health = 50;
-        this.MovementSpeed = 5;
+        this.MovementSpeed = 10;
         this.Eyesight = 10;
         this.Hearing = 20;
         this.Angle = 0;
@@ -107,57 +113,119 @@ public class PuppetAgent extends AgentModel {
 
     @Override
     public void agentHit() {
-
+        throw new NotImplementedException();
     }
 
     @Override
     public void updateAgentState() {
+        // Bounds Check - Do nothing
+        if( this.CurrentPath == null) {
+            return;
+        } else if (this.CurrentPath.getCount() < 1 || this.CurrentPathIndex < 0) {
+            return;
+        }
 
+        // Collect next intermediate node to move to
+        TileNode tempTile = this.CurrentPath.get(this.CurrentPathIndex);
+
+        // Calculate pixel distance between positions
+        Vector2 currentPosition = new Vector2(this.Pixel_X, this.Pixel_Y);
+        Vector2 nextPosition = tempTile.getPixelVector2();
+
+        float distance = currentPosition.dst2(nextPosition);
+
+        // Make sure to move as far as possible
+        if( distance < this.MovementSpeed ) {
+
+            if( this.CurrentPathIndex + 1 < this.CurrentPath.getCount() ) {
+                tempTile = this.CurrentPath.get(this.CurrentPathIndex + 1);
+                nextPosition = tempTile.getPixelVector2();
+            } else {
+                // We have arrived!
+                this.Pixel_X = nextPosition.x;
+                this.Pixel_Y = nextPosition.y;
+                this.Sprite.setPosition(this.Pixel_X, this.Pixel_Y);
+
+                // Clear Path
+                this.CurrentPath = null;
+                this.CurrentPathIndex = -1;
+
+                return;
+            }
+        }
+
+        // Update Position
+        Vector2 direction = nextPosition.sub(currentPosition).nor();
+        direction.mulAdd(direction, this.MovementSpeed);
+
+        this.Pixel_X += direction.x;
+        this.Pixel_Y += direction.y;
+        this.Sprite.setPosition(this.Pixel_X, this.Pixel_Y);
     }
 
     @Override
     public void drawAgent(SpriteBatch sb) {
+        updateAgentState();
 
+        this.Sprite.draw(sb);
     }
 
     @Override
     public void drawLines(ShapeRenderer sr) {
 
+        // Draws the CurrentPath.
+        if( this.CurrentPath != null) {
+            for (int i = 1; i < this.CurrentPath.getCount(); i++) {
+                sr.rectLine(this.CurrentPath.get(i - 1).getPixelX(), this.CurrentPath.get(i - 1).getPixelY(),
+                        this.CurrentPath.get(i).getPixelX(), this.CurrentPath.get(i).getPixelY(), 5);
+            }
+        }
     }
 
+    /**
+     * Updates the Path to where you touch.
+     * @param goalX
+     * @param goalY
+     */
+    public void setPathToGoal(float goalX, float goalY) {
+        // Reset Index Tracker
+        this.CurrentPathIndex = 0;
 
-    private GraphPath<TileNode> getPathToGoal(float goalX, float goalY) {
         // Generate Cell X and Y positions
         int numCellY = Gdx.graphics.getHeight() / this.TileSize;
 
+        // Current Sprite Location
         float spriteX = this.Sprite.getX();
         float spriteY = this.Sprite.getY();
 
+        // Current Sprite Tile Location
         int spriteCellX = (int) (spriteX / this.TileSize);
         int spriteCellY = (int) (spriteY / this.TileSize);
 
+        // Tile Location for Touch
         int touchCellX = (int) (goalX / this.TileSize);
         int touchCellY = (int) (goalY / this.TileSize);
 
         // Start node and connections
-        //TileNode startNode = new TileNode(spriteX,spriteY,spriteCellX,spriteCellY,950);
         TileNode startNode = findIndex((spriteCellX * numCellY) + spriteCellY, this.MapNodes);
 
         // End node and connections
-        //TileNode endNode = new TileNode(touchX, touchY, touchCellX, touchCellY, 951);
         TileNode endNode = findIndex((touchCellX * numCellY) + touchCellY, this.MapNodes);
 
         // The returned path once computed
-        //GraphPath<Connection<TileNode>> path = new DefaultGraphPath<Connection<TileNode>>();
         this.CurrentPath = new DefaultGraphPath<TileNode>();
 
         // Compute Path!
-        //this.indexedPathFinder.searchConnectionPath(startNode, endNode, new TileHeuristic(), path);
         this.PathFinder.searchNodePath(startNode, endNode, new TileHeuristic(), this.CurrentPath);
-
-        return this.CurrentPath;
     }
 
+    /**
+     * A helper function to find a TileNode in MapNodes.
+     *
+     * @param index
+     * @param nodeTracker
+     * @return
+     */
     private TileNode findIndex(Integer index, HashMap<Integer, TileNode> nodeTracker) {
         TileNode temp = null;
 

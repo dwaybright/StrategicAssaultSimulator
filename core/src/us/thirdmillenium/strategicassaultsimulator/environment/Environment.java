@@ -44,6 +44,9 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.HashMap;
 
+import us.thirdmillenium.strategicassaultsimulator.agents.AgentModel;
+import us.thirdmillenium.strategicassaultsimulator.agents.PuppetAgent;
+import us.thirdmillenium.strategicassaultsimulator.ai.TileAStarPathFinder;
 import us.thirdmillenium.strategicassaultsimulator.ai.TileNode;
 
 
@@ -61,11 +64,13 @@ public class Environment implements InputProcessor{
 
     // A mapping of all Nodes that are traversible, and a ShapeRenderer to plot them
     private IndexedGraph<TileNode> TileNodeGraph;
+    private TileAStarPathFinder PathFinder;
     private HashMap<Integer, TileNode> TraverseNodes;
     private ShapeRenderer MapNodeSR;
 
-    // A Renderer for the Agents
+    // Agent Stuff
     private SpriteBatch SpriteBatchRenderer;
+    private AgentModel myAgent;
 
     // An A* Debug Renderer
     private ShapeRenderer LineRenderer;
@@ -102,6 +107,13 @@ public class Environment implements InputProcessor{
 
         // Generate TileMap Objects
         createGraphFromTileMap(w, h, tileSize);
+
+        // Init Agents
+        try {
+            this.myAgent = new PuppetAgent(this.TiledMap, this.TraverseNodes, this.PathFinder, 0, 0, 32);
+        } catch( Exception ex ) {
+            String msg = ex.getMessage();
+        }
     }
 
 
@@ -142,7 +154,7 @@ public class Environment implements InputProcessor{
         this.SpriteBatchRenderer.setProjectionMatrix(this.Camera.combined);
         this.SpriteBatchRenderer.begin();
 
-        // For each Agent?
+        this.myAgent.drawAgent(this.SpriteBatchRenderer);
 
         this.SpriteBatchRenderer.end();
 
@@ -153,6 +165,7 @@ public class Environment implements InputProcessor{
 
         // For each Agent.  Different Colors?
         this.LineRenderer.setColor(Color.BLACK);
+        this.myAgent.drawLines(this.LineRenderer);
 
         this.LineRenderer.end();
     }
@@ -180,7 +193,9 @@ public class Environment implements InputProcessor{
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
+        ((PuppetAgent) this.myAgent).setPathToGoal(screenX, screenY);
+
+        return true;
     }
 
     @Override
@@ -378,6 +393,7 @@ public class Environment implements InputProcessor{
             }
 
             this.TileNodeGraph = new DefaultIndexedGraph<TileNode>(myNodes);
+            this.PathFinder = new TileAStarPathFinder(this.TileNodeGraph);
 
         } catch(Exception ex)
         {
