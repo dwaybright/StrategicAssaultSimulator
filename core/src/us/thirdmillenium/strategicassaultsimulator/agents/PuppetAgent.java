@@ -223,7 +223,7 @@ public class PuppetAgent extends AgentModel {
         // The returned path once computed
         this.CurrentPath = new DefaultGraphPath<TileNode>();
 
-        // Compute Path!  (TODO:  Find the NullPointer error)
+        // Compute Path!
         this.PathFinder.searchNodePath(startNode, endNode, new TileHeuristic(), this.CurrentPath);
 
         //this.CurrentPath.reverse();
