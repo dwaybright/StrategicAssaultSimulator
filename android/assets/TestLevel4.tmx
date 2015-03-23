@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="25" height="38" tilewidth="32" tileheight="32" nextobjectid="74">
+ <tileset firstgid="1" name="Floor-Lvl1" tilewidth="32" tileheight="32">
+  <image source="tile1_32x32.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="2" name="Wall-Lvl1" tilewidth="32" tileheight="32">
+  <image source="wall_silver_32x32.png" width="32" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="blocked" value="1"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="3" name="blankTile" tilewidth="32" tileheight="32">
+  <image source="blankTile.png" trans="ff00ff" width="32" height="32"/>
+ </tileset>
+ <layer name="Floor-Layer" width="25" height="38">
+  <data encoding="base64" compression="zlib">
+   eJztwwEJAAAMBKH7/qWXY6DgqqmqqurTB6KhA7c=
+  </data>
+ </layer>
+ <layer name="Wall-Layer" width="25" height="38">
+  <data encoding="base64" compression="zlib">
+   eJzVltsKxDAIREPy//+87EOhyMw4mrTLCj5UTE+Mk8saY6ybz/DNfJh5yN9iOONPMzqm5jZB/iy64iDGAjFlaLxbR5XBajjJuNuvGGzPoP/FuKPLSh1O7gkGW4cxfO1mDCf2DwzUc7RWKCfTszMfpSvFYP2tMpxYlovWyelH5Uzo7sEdRkVXOww1507PM4baM4qh7uru2V5hZP87pd3TDGXsjrqs0/PqmdjpHbtXYyx7S7l1MEZcD9RHl3HlMD04pt6JKAcZq4vpQzHi/mR1ZRpkjF3P6mZziGe0U9+bpnSc1fHEmA7j6x9JVQS8
+  </data>
+ </layer>
+ <objectgroup name="Collision">
+  <object id="67" x="128" y="0" width="32" height="1088"/>
+  <object id="68" x="160" y="1056" width="512" height="32"/>
+  <object id="69" x="640" y="128" width="32" height="928"/>
+  <object id="70" x="288" y="128" width="352" height="32"/>
+  <object id="71" x="288" y="160" width="32" height="768"/>
+  <object id="72" x="320" y="896" width="192" height="32"/>
+  <object id="73" x="480" y="288" width="32" height="608"/>
+ </objectgroup>
+</map>
