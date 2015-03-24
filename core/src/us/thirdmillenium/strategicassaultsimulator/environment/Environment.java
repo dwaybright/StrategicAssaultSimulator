@@ -53,6 +53,7 @@ import us.thirdmillenium.strategicassaultsimulator.ai.TileNode;
 public class Environment implements InputProcessor{
     // Debug Flag
     private boolean DEBUG = true;
+    private boolean TOUCHDOWN = false;
 
     // OpenGL Camera for Orientation
     private OrthographicCamera Camera;
@@ -189,16 +190,28 @@ public class Environment implements InputProcessor{
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if( !this.TOUCHDOWN ) {
+            this.TOUCHDOWN = true;
+
+            return true;
+        }
+
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        float h = Gdx.graphics.getHeight();
+        if( this.TOUCHDOWN ) {
+            float h = Gdx.graphics.getHeight();
 
-        ((PuppetAgent) this.myAgent).setPathToGoal(screenX, h - screenY);
+            ((PuppetAgent) this.myAgent).setPathToGoal(screenX, h - screenY);
 
-        return true;
+            this.TOUCHDOWN = false;
+
+            return true;
+        }
+
+        return false;
     }
 
     @Override
