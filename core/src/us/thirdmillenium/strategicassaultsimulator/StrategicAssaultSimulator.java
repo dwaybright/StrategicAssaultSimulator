@@ -41,7 +41,7 @@ public class StrategicAssaultSimulator extends ApplicationAdapter {
 	public void create () {
         // Create IndexedAStarPathFinder Object for this Game Level
         this.tileSize = 32;
-        this.MyEnvironment = new Environment("MyCrappyMap.tmx", this.tileSize);
+        this.MyEnvironment = new Environment("TestLevel5.tmx", this.tileSize);
 
         //this.mapNodes = createIndexedGraph(w, h, this.tileSize);
         //this.indexedPathFinder = new TileAStarPathFinder(this.mapNodes);

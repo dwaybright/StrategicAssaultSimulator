@@ -21,7 +21,7 @@
  </layer>
  <layer name="Wall-Layer" width="25" height="38">
   <data encoding="base64" compression="zlib">
-   eJzdlt0KwCAIhWW9/zvvahAH/86x7WKCBJV+mkYtM1s/1Ee+ZihS+T8lXcaUnzHUM65yuIZqm6+MofYWy1A0Y+xymS6RbYfB5lHZYL4Mh2V4nEpURtWneyzKWSEzmz/JMGf+jTwef3gPlHpgbJU/j3uKYaYzFowdBu7r3qMqj6oHq5qzDC/nKQNtVcbOOsVg3zyWka2bsw9z6zDQHiXbk71vWbxMLJO/QMTGOLv3A9fZv09Uq04dPBt23mOsYMy4DAPPLYt30otMH0T2X4rSx5Oef0tvknoGnw==
+   eJzt1rENACAMA8GI7L8zKzhYKYy++C7SpUBAV1UThXfMVMPZDwNDmZucU8dQd8b4w5jMYeQar2+ec9epYewbG38foqQuz2UKvw==
   </data>
  </layer>
  <objectgroup name="Collision">
