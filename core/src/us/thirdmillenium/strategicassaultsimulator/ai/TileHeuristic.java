@@ -36,7 +36,7 @@ public class TileHeuristic implements Heuristic<TileNode> {
     public float estimate(TileNode node, TileNode endNode) {
         // Straight Line
         Vector2 start = new Vector2(node.getPixelX(), node.getPixelY());
-        Vector2 end = new Vector2(endNode.getPixelX(), node.getPixelY());
+        Vector2 end = new Vector2(endNode.getPixelX(), endNode.getPixelY());
 
         return start.dst(end);
     }
