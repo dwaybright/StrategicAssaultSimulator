@@ -3,8 +3,8 @@ An Android simulation game that relies on Neural Network controlled Agents, with
 
 This branch builds the basic architecture for the entire simulation, and a testbed for running different neural networks.
 
-Visit the desktop trainer to see current method for neural network agent training!
-https://github.com/dwaybright/SAS-DesktopTrainer
+Visit the ![Desktop Trainer](https://github.com/dwaybright/SAS-DesktopTrainer) to see current method for neural network agent training!
+
 
 Example of an Agent created with Gimp (http://www.gimp.org/)
 
