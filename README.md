@@ -1,16 +1,16 @@
 # Strategic Assault Simulator
-An Android simulation game that relies on Neural Network controlled Agents, with extensive use of ![LibGDX] (http://libgdx.badlogicgames.com/).
+An Android simulation game that relies on Neural Network controlled Agents, with extensive use of ![LibGDX] (https://github.com/libgdx/libgdx).
 
 This branch builds the basic architecture for the entire simulation, and a testbed for running different neural networks.
 
 Visit the ![Desktop Trainer](https://github.com/dwaybright/SAS-DesktopTrainer) to see current method for neural network agent training!
 
 
-Example of an Agent created with ![Gimp](http://www.gimp.org/)
+Example of an Agent created with [Gimp](http://www.gimp.org/)
 
 ![Agent](android/assets/goodGuyDotArrow.png)
 
-Example of a Level created with ![Tiled](http://www.mapeditor.org/)
+Example of a Level created with [Tiled](http://www.mapeditor.org/)
 
 ![Level 1](android/assets/MyCrappyMap.png)
 
