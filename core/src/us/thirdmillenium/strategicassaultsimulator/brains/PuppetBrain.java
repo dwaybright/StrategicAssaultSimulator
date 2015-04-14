@@ -35,5 +35,8 @@ public class PuppetBrain extends Brain {
     }
 
 
-
+    @Override
+    public double[] brainFreeze(double... inputs) {
+        return new double[0];
+    }
 }

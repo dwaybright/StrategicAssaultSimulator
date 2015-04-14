@@ -26,10 +26,32 @@
 
 package us.thirdmillenium.strategicassaultsimulator.brains;
 
+import org.neuroph.core.NeuralNetwork;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 
-public abstract class Brain {
+public class SuperSimpleBrain extends Brain {
+    private NeuralNetwork myNN;
 
-    public abstract double[] brainFreeze(double...inputs);
 
+    public SuperSimpleBrain() throws FileNotFoundException {
+        // Open the Neural Network
+        InputStream fd = new FileInputStream("ANNs/SuperSimpleNN.nnet");
+        this.myNN = NeuralNetwork.load(fd);
+    }
+
+    @Override
+    public double[] brainFreeze(double...inputs) {
+        // Set Inputs
+        this.myNN.setInput(inputs);
+
+        // Calculate Network
+        this.myNN.calculate();
+
+        // Return output
+        return this.myNN.getOutput();
+    }
 }
