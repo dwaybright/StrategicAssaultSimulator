@@ -1,30 +1,21 @@
 /*
  Copyright (C) 2015 Daniel Waybright, daniel.waybright@gmail.com
 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License along
- with this program (located in root of GitHub folder); if not, visit:
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
     http://www.apache.org/licenses/LICENSE-2.0
 
-
- **** Special Thanks ****
-
- This project makes extensive use of the LibGDX library
- http://libgdx.badlogicgames.com/index.html
-
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
  */
 
-package us.thirdmillenium.strategicassaultsimulator.ai;
+
+package us.thirdmillenium.strategicassaultsimulator.ai.tile;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedNode;
@@ -79,8 +70,6 @@ public class TileNode implements IndexedNode<TileNode>, Comparable<TileNode>  {
         return this.Pixel_y;
     }
 
-    public Vector2 getPixelVector2(){ return new Vector2(this.Pixel_x, this.Pixel_y); }
-
     @Override
     public int getIndex() {
         return this.id;
@@ -117,4 +106,6 @@ public class TileNode implements IndexedNode<TileNode>, Comparable<TileNode>  {
 
         return 1;
     }
+
+    public Vector2 getPixelVector2(){ return new Vector2(this.Pixel_x, this.Pixel_y); }
 }

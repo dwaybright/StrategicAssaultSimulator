@@ -1,30 +1,20 @@
 /*
  Copyright (C) 2015 Daniel Waybright, daniel.waybright@gmail.com
 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License along
- with this program (located in root of GitHub folder); if not, visit:
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
     http://www.apache.org/licenses/LICENSE-2.0
 
-
- **** Special Thanks ****
-
- This project makes extensive use of the LibGDX library
- http://libgdx.badlogicgames.com/index.html
-
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
  */
 
-package us.thirdmillenium.strategicassaultsimulator.ai;
+package us.thirdmillenium.strategicassaultsimulator.ai.tile;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.Graph;
@@ -129,6 +119,10 @@ public class TileAStarPathFinder implements PathFinder<TileNode> {
         this.myGraph = graph;
     }
 
+    public TileAStarPathFinder() {
+        this.myGraph = null;
+    }
+
 
     @Override
     public boolean searchConnectionPath(TileNode startNode, TileNode endNode, Heuristic<TileNode> heuristic, GraphPath<Connection<TileNode>> outPath) {
@@ -192,9 +186,70 @@ public class TileAStarPathFinder implements PathFinder<TileNode> {
             walkBack = walkBack.getCameFrom();
         }
 
+        //outPath.reverse();
+
+        return true;
+    }
+
+    private boolean returnNodePath2(AStarTileNode lastNode, Array<TileNode> outPath) {
+        AStarTileNode walkBack = lastNode;
+
+        while( walkBack != null && !walkBack.isFirstNode() ) {
+            outPath.add(walkBack.getTileNode());
+            walkBack = walkBack.getCameFrom();
+        }
+
         outPath.reverse();
 
         return true;
+    }
+
+
+    public boolean searchNodePath2(TileNode startNode, TileNode endNode, Heuristic<TileNode> heuristic, Array<TileNode> outPath) {
+        PriorityQueue<AStarTileNode> openList = new PriorityQueue<AStarTileNode>(200, new AStarTileNodeComparator());
+        HashSet<TileNode> closeList= new HashSet<TileNode>(250);
+        HashSet<TileNode> openListTracker = new HashSet<TileNode>(250);
+        AStarTileNode current, end, temp;
+        TileNode neighbor;
+
+
+        // Setup A* with StartNode
+        current = new AStarTileNode(startNode, 0, heuristic.estimate(startNode, endNode));
+        end = new AStarTileNode(endNode, 0, 0);
+
+        openList.add(current);
+
+
+        // Begin Search
+        while (openList.size() > 0) {
+            // Collect closest item to the Goal
+            current = openList.peek();
+
+            // Path has been found
+            if( current.equals(end) ) {
+                return returnNodePath2(current, outPath);
+            }
+
+            // Remove current from openList, add to closeList
+            current = openList.poll();
+            closeList.add(current.getTileNode());
+
+            // Loop through neighbors, adding to openList
+            Array<Connection<TileNode>> adjacentCells = current.getTileNode().getConnections();
+
+            for( int i = 0; i < adjacentCells.size; i++) {
+                neighbor = adjacentCells.get(i).getToNode();
+
+                if( !closeList.contains(neighbor) && !openListTracker.contains(neighbor) ) {
+                    temp = new AStarTileNode(neighbor, current.getDistanceFromStart() + 1, heuristic.estimate(neighbor, endNode));
+                    temp.setCameFrom(current);
+                    openList.add(temp);
+                    openListTracker.add(neighbor);
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
