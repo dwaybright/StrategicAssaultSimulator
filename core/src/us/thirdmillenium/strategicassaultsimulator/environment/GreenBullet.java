@@ -32,7 +32,7 @@ public class GreenBullet {
 
 
         // Bullet Sprite
-        Texture bulletTexture = new Texture("core/assets/bullet1.png");
+        Texture bulletTexture = new Texture("bullet1.png");
         this.bulletSprite = new Sprite(bulletTexture);
         this.bulletSprite.setCenter(bulletLocation.x, bulletLocation.y);
         this.bulletSprite.setRotation(degreeAngle);

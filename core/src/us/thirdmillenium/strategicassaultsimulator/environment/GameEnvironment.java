@@ -104,7 +104,7 @@ public class GameEnvironment extends Environment implements InputProcessor {
         //Gdx.graphics.setDisplayMode((int)width, (int)height, false);
 
         // The test level to display
-        String levelPath = Params.TileMapsPath + "TestLevel" + testLevelID + ".tmx";
+        String levelPath = "TestLevel" + testLevelID + ".tmx";
 
         // Setup camera
         this.Camera = new OrthographicCamera();
@@ -237,13 +237,13 @@ public class GameEnvironment extends Environment implements InputProcessor {
 
 
 
-            trainees.add(new ConePuppetAgent(new Vector2(startX + (sign * 80), startY), startAngle, degreeVision, depthVision, health, Params.TrainingAgentLivePNG, true, random,
-                    this.collisionLines, prefPath3, prefNodeTracker3, this.TraverseNodes, this.TiledMap, this.trainees, this.shooters, this.BulletTracker));
+            //trainees.add(new ConePuppetAgent(new Vector2(startX + (sign * 80), startY), startAngle, degreeVision, depthVision, health, Params.TrainingAgentLivePNG, true, random,
+            //        this.collisionLines, prefPath3, prefNodeTracker3, this.TraverseNodes, this.TiledMap, this.trainees, this.shooters, this.BulletTracker));
 
 
 
-            trainees.add(new ConePuppetAgent(new Vector2(startX + (sign * 120), startY), startAngle, degreeVision, depthVision, health, Params.TrainingAgentLivePNG, true, random,
-                    this.collisionLines, prefPath4, prefNodeTracker4, this.TraverseNodes, this.TiledMap, this.trainees, this.shooters, this.BulletTracker));
+            //trainees.add(new ConePuppetAgent(new Vector2(startX + (sign * 120), startY), startAngle, degreeVision, depthVision, health, Params.TrainingAgentLivePNG, true, random,
+            //        this.collisionLines, prefPath4, prefNodeTracker4, this.TraverseNodes, this.TiledMap, this.trainees, this.shooters, this.BulletTracker));
         }
     }
 

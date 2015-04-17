@@ -32,6 +32,7 @@ import java.util.Random;
 
 import us.thirdmillenium.strategicassaultsimulator.environment.Environment;
 import us.thirdmillenium.strategicassaultsimulator.environment.GameEnvironment;
+import us.thirdmillenium.strategicassaultsimulator.environment.Params;
 
 
 public class StrategicAssaultSimulator extends ApplicationAdapter {
@@ -43,13 +44,13 @@ public class StrategicAssaultSimulator extends ApplicationAdapter {
 	public void create () {
         this.random = new Random();
 
-        this.MyEnvironment = new GameEnvironment("NNPath.nnet", this.random, 5);
+        this.MyEnvironment = new GameEnvironment(Params.PathToBaseNN, this.random, 3);
 	}
 
 	@Override
 	public void render () {
 
-        this.MyEnvironment.simulate();
+        this.MyEnvironment.simulate(1 / (float)10);
 
 	}
 }

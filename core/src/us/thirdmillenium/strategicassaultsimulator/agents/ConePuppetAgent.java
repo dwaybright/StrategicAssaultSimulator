@@ -136,8 +136,8 @@ public class ConePuppetAgent extends AgentModel {
         this.collisionLines = collisionLines;
 
         // Writing Training Data
-        this.writeDataToFile = writeDataToFile;
-        if( writeDataToFile ) { this.csvFile = new File(Params.PathToCSV); }
+        //this.writeDataToFile = writeDataToFile;
+        //if( writeDataToFile ) { this.csvFile = new File(Params.PathToCSV); }
 
         // Other information
         this.random = random;

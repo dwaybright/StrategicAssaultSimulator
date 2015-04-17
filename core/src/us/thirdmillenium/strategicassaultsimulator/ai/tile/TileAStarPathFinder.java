@@ -28,7 +28,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 public class TileAStarPathFinder implements PathFinder<TileNode> {
@@ -126,7 +125,7 @@ public class TileAStarPathFinder implements PathFinder<TileNode> {
 
     @Override
     public boolean searchConnectionPath(TileNode startNode, TileNode endNode, Heuristic<TileNode> heuristic, GraphPath<Connection<TileNode>> outPath) {
-        throw new NotImplementedException();
+        return false;
     }
 
     @Override
@@ -254,7 +253,7 @@ public class TileAStarPathFinder implements PathFinder<TileNode> {
 
     @Override
     public boolean search(PathFinderRequest<TileNode> request, long timeToRun) {
-        throw new NotImplementedException();
+        return false;
     }
 
 

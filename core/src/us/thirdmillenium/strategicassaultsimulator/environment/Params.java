@@ -27,46 +27,8 @@ public interface Params {
     static final float SQRT2 = 1.4142135f;
 
 
-	/*
-	 *      GA Parameters
-	 */
-
-    /** The base folder to store all GA run information in.
-     *  These files will be generated for you. */
-    static final String GA_OutputPath   = "core/docs/GARunOutput/Run/";
-
     /** Path to the base NN to be used by GA. */
-    static final String PathToBaseNN    = "core/docs/BaseANNs/Cone100_MLP4.nnet";
-
-    /** Path to the Training CSVs */
-    static final String PathToCSV       = "core/docs/TrainingCSVs/trainingCSV3.csv";
-
-    /** The number of Genomes to have each generation. */
-    static final int NumGenomes = 1000;
-
-    /** The number of Generations to run the GA for. */
-    static final int NumGenerations = 100;
-
-    /** How many Elite Genomes to keep? **/
-    static final int NumEliteGenomes = (int)(NumGenomes * 0.35);
-
-    /** Perform Crossovers. */
-    static final boolean PerformCrossovers = true;
-
-    /** Percent of network weights to Crossover */
-    static final double CrossoverPercent = 0.35;
-
-    /** Perform Mutations. */
-    static final boolean PerformMutations = true;
-
-    /** What percent (+/-) of the weights should be mutated. */
-    static final double PercentMutations = 0.35;
-
-    /** Maximum percent change performed by mutation. */
-    static final double MaxPercentMutationChange = 0.15;
-
-    /** Number of Threads used by FitnessScorer */
-    static final int NumThreads = 10;
+    static final String PathToBaseNN    = "data/Cone100_MLP4.nnet";
 
 
     /*
@@ -85,19 +47,19 @@ public interface Params {
 	 */
 
     /** All TileMap levels reside in this directory */
-    static final String TileMapsPath            = "core/assets/";
+    static final String TileMapsPath            = ""; //"core/assets/";
 
     /** The path to the level to train NN on */
-    static final String TileMapLevelPath        = "core/assets/MyCrappyMap2.tmx";
+    static final String TileMapLevelPath        = "MyCrappyMap2.tmx"; //"core/assets/MyCrappyMap2.tmx";
 
     /** Texture (*.png) for Training Agent. */
-    static final String TrainingAgentLivePNG    = "core/assets/goodGuyDotArrow.png";
+    static final String TrainingAgentLivePNG    = "goodGuyDotArrow.png";
 
     /** Texture (*.png) for Shooting Agent. */
-    static final String ShootingAgentLivePNG    = "core/assets/badGuyDotArrow.png";
+    static final String ShootingAgentLivePNG    = "badGuyDotArrow.png";
 
     /** Texture for a deceased dot. */
-    static final String DeadAgentPNG            = "core/assets/deadDot.png";
+    static final String DeadAgentPNG            = "deadDot.png";
 
 
     /** Pixel Size for Tiles */
@@ -120,14 +82,14 @@ public interface Params {
 
 
     /** The number of simulation steps to take. Assume ~30 FPS, then 1800 is ~1 minute. */
-    static final int SimulationTimeSteps = 1000;
+    //static final int SimulationTimeSteps = 1000;
 
     /** Assumed FPS rate. */
     static final double FramesPerSecond = 30;
 
 
     /** Bullet Velocity (pixels/frame). */
-    static final float BulletVelocity = 5;
+    static final float BulletVelocity = 20;
 
     /** Bullet Path vertices at Origin (0,0) */
     static final float[] BulletPathOriginVertices = {
@@ -145,13 +107,13 @@ public interface Params {
 
 
     /** Agent Velocity (pixels/frame). */
-    static final float AgentMaxMovement = 3f;
+    static final float AgentMaxMovement = 10f;
 
     /** How Far an Agent can Rotate in a frame. */
     static final float AgentMaxTurnAngle = 15f;
 
     /** Agent Fire Rate (fire/sec) */
-    static final float AgentFireRate = 1f;
+    static final float AgentFireRate = 4f;
 
     static final int AgentFireRateCooldown = (int)FramesPerSecond / 2;
 

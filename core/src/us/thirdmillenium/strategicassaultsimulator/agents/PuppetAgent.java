@@ -83,7 +83,7 @@ public class PuppetAgent extends AgentModel {
 
 
     // Output Path
-    private String csvOutputPath = Params.PathToCSV;
+    private String csvOutputPath = ""; //Params.PathToCSV;
     private File csvOutputFile;
     private ArrayList<double[]> trainingData;
 
@@ -132,35 +132,35 @@ public class PuppetAgent extends AgentModel {
         throw new NotImplementedException();
     }
 
-    private void writeTrainingData() {
-        PrintWriter csvWriter = null;
-
-        try{
-            // Delete if currently exists, then create fresh file
-            if( !this.csvOutputFile.exists() ) {
-                this.csvOutputFile.createNewFile();
-            }
-
-            // Write out to file
-            csvWriter = new PrintWriter(this.csvOutputFile);
-
-            for(int i = 0; i < this.trainingData.size(); i++ ) {
-                double[] temp = this.trainingData.get(i);
-
-                for(int j = 0; j < temp.length; j++ ) {
-                    csvWriter.print( temp[j] );
-                    csvWriter.print( "," );
-                }
-
-                csvWriter.println("");
-            }
-
-        } catch (Exception ex) {
-
-        } finally {
-            if( csvWriter != null ) { csvWriter.close(); }
-        }
-    }
+//    private void writeTrainingData() {
+//        PrintWriter csvWriter = null;
+//
+//        try{
+//            // Delete if currently exists, then create fresh file
+//            if( !this.csvOutputFile.exists() ) {
+//                this.csvOutputFile.createNewFile();
+//            }
+//
+//            // Write out to file
+//            csvWriter = new PrintWriter(this.csvOutputFile);
+//
+//            for(int i = 0; i < this.trainingData.size(); i++ ) {
+//                double[] temp = this.trainingData.get(i);
+//
+//                for(int j = 0; j < temp.length; j++ ) {
+//                    csvWriter.print( temp[j] );
+//                    csvWriter.print( "," );
+//                }
+//
+//                csvWriter.println("");
+//            }
+//
+//        } catch (Exception ex) {
+//
+//        } finally {
+//            if( csvWriter != null ) { csvWriter.close(); }
+//        }
+//    }
 
     @Override
     public void updateAgent(float deltaTime) {
@@ -168,7 +168,7 @@ public class PuppetAgent extends AgentModel {
         if( this.CurrentPath == null) {
             return;
         } else if (this.CurrentPath.getCount() < 1 || this.CurrentPathIndex < 0) {
-            writeTrainingData();
+            //writeTrainingData();
             this.CurrentPath = null;
             return;
         }
@@ -204,7 +204,7 @@ public class PuppetAgent extends AgentModel {
                 this.CurrentPathIndex = -1;
 
                 // Write Data
-                writeTrainingData();
+                //writeTrainingData();
 
                 return;
             }
