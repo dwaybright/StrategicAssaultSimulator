@@ -1,5 +1,8 @@
 package us.thirdmillenium.strategicassaultsimulator.brains;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Random;
 
 import org.neuroph.core.NeuralNetwork;

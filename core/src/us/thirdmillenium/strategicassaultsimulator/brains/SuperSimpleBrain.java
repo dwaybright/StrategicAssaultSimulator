@@ -31,6 +31,7 @@ import org.neuroph.core.NeuralNetwork;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Random;
 
 
 public class SuperSimpleBrain extends Brain {
@@ -44,7 +45,7 @@ public class SuperSimpleBrain extends Brain {
     }
 
     @Override
-    public double[] brainFreeze(double...inputs) {
+    public double[] brainCrunch(double...inputs) {
         // Set Inputs
         this.myNN.setInput(inputs);
 
@@ -53,5 +54,20 @@ public class SuperSimpleBrain extends Brain {
 
         // Return output
         return this.myNN.getOutput();
+    }
+
+    @Override
+    public int getNumInputs() {
+        return 0;
+    }
+
+    @Override
+    public int getOutputCounts() {
+        return 0;
+    }
+
+    @Override
+    public void randomWeights(Random random) {
+
     }
 }

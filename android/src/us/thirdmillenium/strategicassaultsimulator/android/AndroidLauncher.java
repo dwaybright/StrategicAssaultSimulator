@@ -30,6 +30,9 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+
+import java.io.File;
+
 import us.thirdmillenium.strategicassaultsimulator.StrategicAssaultSimulator;
 
 
@@ -38,6 +41,20 @@ public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        String[] root;
+        String[] nns;
+        File myNN;
+
+        try {
+            root = getAssets().list("");
+            nns = getAssets().list("NeuralNets/");
+
+            myNN = getAssets().openFd("SuperSimpleNN.nnet")
+        } catch(Exception ex) {
+
+        }
+
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new StrategicAssaultSimulator(), config);
 	}
