@@ -21,28 +21,9 @@ public class NeuralNetworkBrain extends Brain {
         this.myNN = nnet;
     }
 
-    public NeuralNetworkBrain(String nnetPath) {
-        //this.myNN = NeuralNetwork.createFromFile(nnetPath);
-//        FileHandle file = Gdx.files.local(nnetPath);
-//        String locRoot = ;
-//        boolean localStore = Gdx.files.isLocalStorageAvailable();
-//        //Gdx.files.
-//        FileHandle test2 = Gdx.files.local("data/data/us.thirdmillenium.strategicassaultsimulator.Cone100_MLP4.nnet");
-//        File exit = test2.file();
+    public NeuralNetworkBrain(InputStream nnetInputStream) {
 
-        //FileHandle[] files = Gdx.files.local("data/").list();
-        //FileHandle handle = Gdx.files.internal("data/badGuyDot.png");
-        FileHandle h2 = Gdx.files.internal("data/Cone100_MLP4.nnet");
-        //File file = h2.file();
-
-        File file = new File("file:///android_asset/Cone100_MLP4.nnet");
-
-
-        boolean exists = file.exists();
-        boolean read = file.canRead();
-        boolean isFile = file.isFile();
-
-        this.myNN = NeuralNetwork.createFromFile(file);
+        this.myNN = NeuralNetwork.load(nnetInputStream);
     }
 
     @Override
