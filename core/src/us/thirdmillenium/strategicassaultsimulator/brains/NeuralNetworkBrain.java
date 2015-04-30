@@ -1,12 +1,6 @@
 package us.thirdmillenium.strategicassaultsimulator.brains;
 
-import android.content.res.AssetManager;
-import android.net.Uri;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-
-import java.io.File;
 import java.io.InputStream;
 import java.util.Random;
 
@@ -22,8 +16,16 @@ public class NeuralNetworkBrain extends Brain {
     }
 
     public NeuralNetworkBrain(InputStream nnetInputStream) {
+        try {
+            // Reset for multiple reads
+            nnetInputStream.reset();
 
-        this.myNN = NeuralNetwork.load(nnetInputStream);
+            // Read in stream
+            this.myNN = NeuralNetwork.load(nnetInputStream);
+        } catch (Exception ex) {
+            System.err.println("Unable to load neural network\n" + ex.toString());
+            System.exit(5500);
+        }
     }
 
     @Override
