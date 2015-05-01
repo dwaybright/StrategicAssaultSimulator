@@ -95,7 +95,7 @@ public class ConeAgent extends AgentModel {
                      TiledMap gameMap, Set<AgentModel> team, Set<AgentModel> enemies, Set<GreenBullet> bullets, ConcurrentHashMap<Integer, TileNode> mapNodes) {
 
         // Agent Position and Movement Config
-        this.brain = new NeuralNetworkBrain(nnetPath);
+        //this.brain = new NeuralNetworkBrain(nnetPath);
         this.preferredPathNodeTracker = preferredPathNodeTracker;
         this.preferredPath = prefPath;
         this.preferredPathIndex = 0;
