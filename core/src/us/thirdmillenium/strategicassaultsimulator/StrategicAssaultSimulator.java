@@ -28,111 +28,29 @@ package us.thirdmillenium.strategicassaultsimulator;
 
 import com.badlogic.gdx.ApplicationAdapter;
 
+import java.util.Random;
+
 import us.thirdmillenium.strategicassaultsimulator.environment.Environment;
+import us.thirdmillenium.strategicassaultsimulator.environment.GameEnvironment;
+import us.thirdmillenium.strategicassaultsimulator.environment.Params;
 
 
 public class StrategicAssaultSimulator extends ApplicationAdapter {
-    private int tileSize;
-
-    // Environment
     private Environment MyEnvironment;
+    private Random random;
+
 	
 	@Override
 	public void create () {
-        // Create IndexedAStarPathFinder Object for this Game Level
-        this.tileSize = 32;
-        this.MyEnvironment = new Environment("TestLevel5.tmx", this.tileSize);
+        this.random = new Random();
 
-        //this.mapNodes = createIndexedGraph(w, h, this.tileSize);
-        //this.indexedPathFinder = new TileAStarPathFinder(this.mapNodes);
-        //this.path = new DefaultGraphPath<TileNode>();
+        this.MyEnvironment = new GameEnvironment(Params.PathToBaseNN, this.random, 3);
 	}
 
 	@Override
 	public void render () {
 
-        this.MyEnvironment.render();
+        this.MyEnvironment.simulate(1 / (float)10);
 
-/*        // Draw Map Nodes
-        nodeSR.setProjectionMatrix(camera.combined);
-        nodeSR.setColor(Color.OLIVE);
-        nodeSR.begin(ShapeRenderer.ShapeType.Filled);
-
-        if( this.nodeTracker != null ) {
-            for(Integer key : this.nodeTracker.keySet()) {
-                nodeSR.circle(this.nodeTracker.get(key).getPixelX(), this.nodeTracker.get(key).getPixelY(), 10);
-            }
-        }
-
-        nodeSR.end();
-
-
-        // Draw Path
-        sr.setColor(Color.BLACK);
-        sr.setProjectionMatrix(this.camera.combined);
-        sr.begin(ShapeRenderer.ShapeType.Filled);
-
-        for( int i = 1; i < path.getCount(); i++ ) {
-            sr.rectLine(path.get(i - 1).getPixelX(), path.get(i - 1).getPixelY(),
-                    path.get(i).getPixelX(), path.get(i).getPixelY(), 5);
-        }
-
-        sr.end();
-
-        // Draw Sprite
-        sb.setProjectionMatrix(camera.combined);
-        sb.begin();
-        sprite.draw(sb);
-        sb.end();*/
 	}
-
-/*  @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        // Determine Click coordinates
-        Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
-        Vector3 position = camera.unproject(clickCoordinates);
-
-        //this.path = getPathToTouch(position.x, position.y);
-
-        sprite.setPosition(position.x, position.y);
-
-
-        return true;
-    }
-
-    private GraphPath<TileNode> getPathToTouch(float touchX, float touchY) {
-        // Generate Cell X and Y positions
-        int numCellY = Gdx.graphics.getHeight() / this.tileSize;
-
-        float spriteX = this.sprite.getX();
-        float spriteY = this.sprite.getY();
-
-        int spriteCellX = (int) (spriteX / this.tileSize);
-        int spriteCellY = (int) (spriteY / this.tileSize);
-
-        int touchCellX = (int) (touchX / this.tileSize);
-        int touchCellY = (int) (touchY / this.tileSize);
-
-        // Start node and connections
-        //TileNode startNode = new TileNode(spriteX,spriteY,spriteCellX,spriteCellY,950);
-        TileNode startNode = findIndex((spriteCellX * numCellY) + spriteCellY, this.nodeTracker);
-
-        // End node and connections
-        //TileNode endNode = new TileNode(touchX, touchY, touchCellX, touchCellY, 951);
-        TileNode endNode = findIndex((touchCellX * numCellY) + touchCellY, this.nodeTracker);
-
-        // The returned path once computed
-        //GraphPath<Connection<TileNode>> path = new DefaultGraphPath<Connection<TileNode>>();
-        GraphPath<TileNode> path = new DefaultGraphPath<TileNode>();
-
-        // Compute Path!
-        //this.indexedPathFinder.searchConnectionPath(startNode, endNode, new TileHeuristic(), path);
-        try {
-            this.indexedPathFinder.searchNodePath(startNode, endNode, new TileHeuristic(), path);
-        } catch( Exception ex) {
-            String msg = ex.toString();
-        }
-
-        return path;
-    }*/
 }

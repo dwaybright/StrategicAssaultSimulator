@@ -1,35 +1,30 @@
 /*
  Copyright (C) 2015 Daniel Waybright, daniel.waybright@gmail.com
 
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 2 of the License, or
- (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License along
- with this program (located in root of GitHub folder); if not, visit:
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
     http://www.apache.org/licenses/LICENSE-2.0
 
-
- **** Special Thanks ****
-
- This project makes extensive use of the LibGDX library
- http://libgdx.badlogicgames.com/index.html
-
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
  */
 
 
 package us.thirdmillenium.strategicassaultsimulator.agents;
 
 
+import com.badlogic.gdx.ai.pfa.GraphPath;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import us.thirdmillenium.strategicassaultsimulator.ai.tile.TileNode;
 
 /**
  * The AgentModel class is extended by all actual Agents to be made.
@@ -38,19 +33,46 @@ public abstract class AgentModel {
 
 
     /**
-     * Tells the agent it was hit.
+     * This method is called if your agent bounces into something in the world.
      */
     public abstract void agentHit();
 
 
     /**
-     * Has the Agent perform its updates.
+     * This method adjusts Agent rotation and velocity in time.
+     *
+     * @param deltaTime
      */
-    public abstract void updateAgentState();
+    public abstract void updateAgent(float deltaTime);
 
 
     /**
-     * Draws the Agent on the canvas.
+     * Set the preferred path for an Agent.
+     *
+     * @param goalX
+     * @param goalY
+     */
+    public abstract void setPathToGoal(float goalX, float goalY);
+
+
+    /**
+     * Collect what Tile Cell the Agent is on.
+     *
+     * @return
+     */
+    public abstract int getTraverseNodeIndex();
+
+
+    /**
+     * Return the score this Agent has achieved.
+     *
+     * @return
+     */
+    public abstract long getScore();
+
+
+    /**
+     * This method draws the Agent sprite.
      *
      * @param sb
      */
@@ -58,10 +80,34 @@ public abstract class AgentModel {
 
 
     /**
-     * Allows the Agent to draw lines if it wants.
-     * Mostly a DEBUG feature?
+     * This method draws this Agent's current preferred path.
      *
      * @param sr
      */
-    public abstract void drawLines(ShapeRenderer sr);
+    public abstract void drawPath(ShapeRenderer sr);
+
+
+    /**
+     * This method draws a translucent box around what the Agent is viewing.
+     *
+     * @param sr
+     */
+    public abstract void drawVision(ShapeRenderer sr);
+
+
+    /**
+     * Returns a Vector2 for the position Agent is centered on.
+     *
+     * @return
+     */
+    public abstract Vector2 getPosition();
+
+
+    /**
+     * Returns the Bounding Rectangle for this Agent.
+     *
+     * @return
+     */
+    public abstract Rectangle getBoundingRectangle();
+
 }

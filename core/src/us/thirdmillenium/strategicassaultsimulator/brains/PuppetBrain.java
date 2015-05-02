@@ -26,17 +26,29 @@
 
 package us.thirdmillenium.strategicassaultsimulator.brains;
 
+import java.util.Random;
+
 
 
 public class PuppetBrain extends Brain {
 
-    public PuppetBrain() {
-
-    }
-
+    public double[] brainCrunch(double[] inputs) { return new double[0]; }
 
     @Override
-    public double[] brainFreeze(double... inputs) {
-        return new double[0];
+    public int getNumInputs() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public int getOutputCounts() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void randomWeights(Random random) {
+        // TODO Auto-generated method stub
+
     }
 }
