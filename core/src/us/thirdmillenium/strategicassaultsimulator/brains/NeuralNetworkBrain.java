@@ -1,6 +1,8 @@
 package us.thirdmillenium.strategicassaultsimulator.brains;
 
 
+import android.content.res.AssetManager;
+
 import java.io.InputStream;
 import java.util.Random;
 
@@ -11,17 +13,16 @@ public class NeuralNetworkBrain extends Brain {
     private NeuralNetwork myNN;
 
 
-    public NeuralNetworkBrain(NeuralNetwork nnet) {
-        this.myNN = nnet;
-    }
-
-    public NeuralNetworkBrain(InputStream nnetInputStream) {
+    public NeuralNetworkBrain(String nnetPath, AssetManager assman) {
         try {
-            // Reset for multiple reads
-            nnetInputStream.reset();
+            // Get Neural Network Input Stream
+            InputStream nnetInStream = assman.open(nnetPath);
 
             // Read in stream
-            this.myNN = NeuralNetwork.load(nnetInputStream);
+            this.myNN = NeuralNetwork.load(nnetInStream);
+
+            // Close the Stream
+            nnetInStream.close();
         } catch (Exception ex) {
             System.err.println("Unable to load neural network\n" + ex.toString());
             System.exit(5500);

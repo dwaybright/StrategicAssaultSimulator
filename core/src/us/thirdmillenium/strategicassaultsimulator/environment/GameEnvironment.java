@@ -16,6 +16,8 @@ limitations under the License.
 
 package us.thirdmillenium.strategicassaultsimulator.environment;
 
+import android.content.res.AssetManager;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
@@ -59,6 +61,9 @@ public class GameEnvironment extends Environment implements InputProcessor {
     private boolean NNET = true;
     //private float lastAngle = 0;
 
+    // File Asset Manager
+    private AssetManager assman;
+
     // Bullet Tracker
     private Set<GreenBullet> BulletTracker;
 
@@ -97,11 +102,14 @@ public class GameEnvironment extends Environment implements InputProcessor {
      * The constructor takes in a "*.tmx" file, and converts to TileMap.
      * Also prepares LibGDX req'd graphical stuff.
      */
-    public GameEnvironment(String nnetPath, Random random, int testLevelID) {
+    public GameEnvironment(String nnetPath, Random random, AssetManager assman, int testLevelID) {
         // Screen width and height
         this.width  = 800;	//Gdx.graphics.getWidth();
         this.height = 1216;	//Gdx.graphics.getHeight();
         //Gdx.graphics.setDisplayMode((int)width, (int)height, false);
+
+        // AssetManager
+        this.assman = assman;
 
         // The test level to display
         String levelPath = "TestLevel" + testLevelID + ".tmx";
@@ -148,11 +156,6 @@ public class GameEnvironment extends Environment implements InputProcessor {
         int sign = 1;
 
 
-
-
-
-
-
         switch(testLevelID) {
             case 1:
                 startX = 16;
@@ -196,8 +199,8 @@ public class GameEnvironment extends Environment implements InputProcessor {
             GraphPath<TileNode> prefPath = GraphicsHelpers.getPrefPathTest(testLevelID, prefNodeTracker, this.TraverseNodes);
 
             this.trainees.add(new ConeAgent(new Vector2(startX, startY), startAngle, 100, 4 * Params.MapTileSize, 10, Params.TrainingAgentLivePNG,
-                    random, this.collisionLines, Params.PathToBaseNN, prefPath, prefNodeTracker,
-                    this.TiledMap, this.trainees, this.shooters, this.BulletTracker, this.TraverseNodes));
+                    random, this.collisionLines, nnetPath, prefPath, prefNodeTracker,
+                    this.TiledMap, this.trainees, this.shooters, this.BulletTracker, this.TraverseNodes, this.assman));
         }
 
         if( PUPPET ) {
@@ -427,43 +430,6 @@ public class GameEnvironment extends Environment implements InputProcessor {
 
             visionCone.end();
         }
-
-        /*// Test Draw the Collision Boxes
-        if( DEBUG && DRAW ) {
-            ShapeRenderer anotherShapeRenderer = new ShapeRenderer();
-
-	        anotherShapeRenderer.setProjectionMatrix(this.Camera.combined);
-	        anotherShapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-
-	        bullets = this.BulletTracker.iterator();
-
-	        while(bullets.hasNext()) {
-	        	GreenBullet currentBullet = bullets.next();
-	        	anotherShapeRenderer.polygon(currentBullet.getBulletPath().getTransformedVertices());
-	        }
-
-	        for(int i = 0; i < wallMapObjects.getCount(); i++ ){
-	        	Object obj = wallMapObjects.get(i);
-
-	        	if( obj.getClass() == RectangleMapObject.class ) {
-	        		Rectangle boundary = ((RectangleMapObject)obj).getRectangle();
-	        		anotherShapeRenderer.rect(boundary.x, boundary.y, boundary.width, boundary.height);
-
-	        		float[] vertices = {
-	        			boundary.x, boundary.y,
-	        			boundary.x + boundary.width, boundary.y,
-	        			boundary.x + boundary.width, boundary.y + boundary.height,
-	        			boundary.x, boundary.y + boundary.height
-	        		};
-
-	        		//Polygon polyBound = new Polygon(vertices);
-	        		anotherShapeRenderer.setColor(Color.BLUE);
-	        		anotherShapeRenderer.polygon(vertices);
-	        	}
-	        }
-
-	        anotherShapeRenderer.end();
-        }*/
 
 
     }

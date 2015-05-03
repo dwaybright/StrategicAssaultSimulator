@@ -26,6 +26,8 @@
 
 package us.thirdmillenium.strategicassaultsimulator;
 
+import android.content.res.AssetManager;
+
 import com.badlogic.gdx.ApplicationAdapter;
 
 import java.util.Random;
@@ -38,19 +40,44 @@ import us.thirdmillenium.strategicassaultsimulator.environment.Params;
 public class StrategicAssaultSimulator extends ApplicationAdapter {
     private Environment MyEnvironment;
     private Random random;
+    private GAMESTATE state;
+    private AssetManager assman;
 
-	
+
+
+    public StrategicAssaultSimulator(AssetManager assman) {
+        this.assman = assman;
+    }
+
+
 	@Override
 	public void create () {
         this.random = new Random();
+        state = GAMESTATE.LOGINSCREEN;
 
-        this.MyEnvironment = new GameEnvironment(Params.PathToBaseNN, this.random, 3);
+
+        // this.MyEnvironment = new GameEnvironment(Params.PathToBaseNN, this.random, 3);
 	}
+
 
 	@Override
 	public void render () {
 
-        this.MyEnvironment.simulate(1 / (float)10);
+        switch(this.state) {
+            case LOGINSCREEN:
 
+                break;
+
+            case SELECTPATH:
+
+                break;
+
+            case SIMULATE:
+                this.MyEnvironment.simulate(1 / (float)10);
+                break;
+
+            default:
+                break;
+        }
 	}
 }

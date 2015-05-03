@@ -16,6 +16,8 @@ limitations under the License.
 
 package us.thirdmillenium.strategicassaultsimulator.agents;
 
+import android.content.res.AssetManager;
+
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Texture;
@@ -92,10 +94,11 @@ public class ConeAgent extends AgentModel {
 
     public ConeAgent(Vector2 startPosition, float startAngle, int degreesOfView, int visionDepth, int health, String spritePNG,
                      Random random, Set<Line> collisionLines, String nnetPath, GraphPath<TileNode> prefPath, HashSet<TileNode> preferredPathNodeTracker,
-                     TiledMap gameMap, Set<AgentModel> team, Set<AgentModel> enemies, Set<GreenBullet> bullets, ConcurrentHashMap<Integer, TileNode> mapNodes) {
+                     TiledMap gameMap, Set<AgentModel> team, Set<AgentModel> enemies, Set<GreenBullet> bullets, ConcurrentHashMap<Integer, TileNode> mapNodes,
+                     AssetManager assman) {
 
         // Agent Position and Movement Config
-        //this.brain = new NeuralNetworkBrain(nnetPath);
+        this.brain = new NeuralNetworkBrain(nnetPath, assman);
         this.preferredPathNodeTracker = preferredPathNodeTracker;
         this.preferredPath = prefPath;
         this.preferredPathIndex = 0;
