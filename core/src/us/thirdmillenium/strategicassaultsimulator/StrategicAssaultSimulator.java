@@ -35,14 +35,18 @@ import java.util.Random;
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.Environment;
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.GameEnvironment;
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.Params;
+import us.thirdmillenium.strategicassaultsimulator.startup.Startup;
 
 
 public class StrategicAssaultSimulator extends ApplicationAdapter {
-    private Environment MyEnvironment;
-    private Random random;
+    // State Control
     private GAMESTATE state;
-    private AssetManager assman;
+    private Environment MyEnvironment;
+    private Startup startup;
 
+    // Variables
+    private Random random;
+    private AssetManager assman;
 
 
     public StrategicAssaultSimulator(AssetManager assman) {
@@ -53,8 +57,8 @@ public class StrategicAssaultSimulator extends ApplicationAdapter {
 	@Override
 	public void create () {
         this.random = new Random();
-        state = GAMESTATE.LOGINSCREEN;
-
+        this.state = GAMESTATE.LOGINSCREEN;
+        this.startup = new Startup(this.assman);
 
         // this.MyEnvironment = new GameEnvironment(Params.PathToBaseNN, this.random, 3);
 	}
@@ -65,6 +69,7 @@ public class StrategicAssaultSimulator extends ApplicationAdapter {
 
         switch(this.state) {
             case LOGINSCREEN:
+                this.startup.draw();
 
                 break;
 
