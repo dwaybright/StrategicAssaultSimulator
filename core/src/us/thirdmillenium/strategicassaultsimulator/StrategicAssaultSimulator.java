@@ -32,9 +32,9 @@ import com.badlogic.gdx.ApplicationAdapter;
 
 import java.util.Random;
 
-import us.thirdmillenium.strategicassaultsimulator.environment.Environment;
-import us.thirdmillenium.strategicassaultsimulator.environment.GameEnvironment;
-import us.thirdmillenium.strategicassaultsimulator.environment.Params;
+import us.thirdmillenium.strategicassaultsimulator.simulation.environment.Environment;
+import us.thirdmillenium.strategicassaultsimulator.simulation.environment.GameEnvironment;
+import us.thirdmillenium.strategicassaultsimulator.simulation.environment.Params;
 
 
 public class StrategicAssaultSimulator extends ApplicationAdapter {
