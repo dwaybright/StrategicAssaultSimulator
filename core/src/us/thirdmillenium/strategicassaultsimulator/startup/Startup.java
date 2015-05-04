@@ -46,6 +46,20 @@ public class Startup implements InputProcessor {
     private Sprite level4;
     private Sprite level5;
 
+    // Player Variables
+    private Rectangle[] playerSelectRects;
+    private int chosenPlayer = 0;
+    private Sprite choosePlayerText;
+    private Sprite playerPuppet;
+    private Sprite playerNN;
+
+    // Enemy Variables
+    private Rectangle[] enemySelectRects;
+    private int chosenEnemy = 0;
+    private Sprite chooseEnemyText;
+    private Sprite enemyStationary;
+    private Sprite enemyPuppet;
+    private Sprite enemyNN;
 
 
     public Startup(AssetManager assman) {
