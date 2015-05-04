@@ -33,6 +33,7 @@ public class Startup implements InputProcessor {
     private SpriteBatch spriteBatch;
 
     // Sprites for levels
+    private Sprite chooseLevelText;
     private Sprite level1;
     private Sprite level2;
     private Sprite level3;
@@ -50,6 +51,7 @@ public class Startup implements InputProcessor {
         this.spriteBatch = new SpriteBatch();
 
         // Load Level Images
+        this.chooseLevelText = new Sprite(new Texture("LevelImages/ChooseLevel.png"));
         this.level1 = new Sprite(new Texture("LevelImages/Small_Level1.png"));
         this.level2 = new Sprite(new Texture("LevelImages/Small_Level2.png"));
         this.level3 = new Sprite(new Texture("LevelImages/Small_Level3.png"));
@@ -57,17 +59,19 @@ public class Startup implements InputProcessor {
         this.level5 = new Sprite(new Texture("LevelImages/Small_Level5.png"));
 
         // Set Level Image Locations
-        this.level1.setCenter(100, 1100);
-        this.level2.setCenter(250, 1100);
-        this.level3.setCenter(400, 1100);
-        this.level4.setCenter(550, 1100);
-        this.level5.setCenter(700, 1100);
+        this.chooseLevelText.setX(50);
+        this.chooseLevelText.setY(1100);
+        this.level1.setCenter(100, 1050);
+        this.level2.setCenter(250, 1050);
+        this.level3.setCenter(400, 1050);
+        this.level4.setCenter(550, 1050);
+        this.level5.setCenter(700, 1050);
     }
 
 
     public void draw() {
         // Clear Background, and update camera
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(135 / 255f, 206 / 255f, 235 / 255f, 1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.camera.update();
@@ -76,6 +80,7 @@ public class Startup implements InputProcessor {
         this.spriteBatch.setProjectionMatrix(this.camera.combined);
         this.spriteBatch.begin();
 
+        this.chooseLevelText.draw(this.spriteBatch);
         this.level1.draw(this.spriteBatch);
         this.level2.draw(this.spriteBatch);
         this.level3.draw(this.spriteBatch);
