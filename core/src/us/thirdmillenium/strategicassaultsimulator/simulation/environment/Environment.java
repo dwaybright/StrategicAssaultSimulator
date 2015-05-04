@@ -26,7 +26,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-import us.thirdmillenium.strategicassaultsimulator.simulation.tile.TileNode;
+import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileNode;
 import us.thirdmillenium.strategicassaultsimulator.simulation.graphics.Line;
 
 import java.util.Collections;

@@ -15,7 +15,7 @@ limitations under the License.
  */
 
 
-package us.thirdmillenium.strategicassaultsimulator.ai.tile;
+package us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile;
 
 import com.badlogic.gdx.ai.pfa.Heuristic;
 import com.badlogic.gdx.math.Vector2;

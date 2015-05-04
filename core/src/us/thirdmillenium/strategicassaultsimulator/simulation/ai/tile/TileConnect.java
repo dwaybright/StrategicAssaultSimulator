@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
  */
 
-package us.thirdmillenium.strategicassaultsimulator.ai.tile;
+package us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 

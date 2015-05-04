@@ -32,9 +32,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.Params;
-import us.thirdmillenium.strategicassaultsimulator.simulation.tile.TileAStarPathFinder;
-import us.thirdmillenium.strategicassaultsimulator.simulation.tile.TileHeuristic;
-import us.thirdmillenium.strategicassaultsimulator.simulation.tile.TileNode;
+import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileAStarPathFinder;
+import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileHeuristic;
+import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileNode;
 import us.thirdmillenium.strategicassaultsimulator.simulation.brains.Brain;
 import us.thirdmillenium.strategicassaultsimulator.simulation.brains.NeuralNetworkBrain;
 import us.thirdmillenium.strategicassaultsimulator.simulation.graphics.GraphicsHelpers;

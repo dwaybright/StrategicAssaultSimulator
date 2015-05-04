@@ -35,9 +35,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.Params;
-import us.thirdmillenium.strategicassaultsimulator.simulation.tile.TileAStarPathFinder;
-import us.thirdmillenium.strategicassaultsimulator.simulation.tile.TileHeuristic;
-import us.thirdmillenium.strategicassaultsimulator.simulation.tile.TileNode;
+import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileAStarPathFinder;
+import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileHeuristic;
+import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileNode;
 import us.thirdmillenium.strategicassaultsimulator.simulation.brains.Brain;
 import us.thirdmillenium.strategicassaultsimulator.simulation.brains.PuppetBrain;
 import us.thirdmillenium.strategicassaultsimulator.simulation.graphics.GraphicsHelpers;

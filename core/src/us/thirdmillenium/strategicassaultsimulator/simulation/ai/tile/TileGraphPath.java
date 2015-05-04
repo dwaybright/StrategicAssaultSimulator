@@ -15,7 +15,7 @@ limitations under the License.
  */
 
 
-package us.thirdmillenium.strategicassaultsimulator.simulation.tile;
+package us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile;
 
 import com.badlogic.gdx.ai.pfa.GraphPath;
 

@@ -43,7 +43,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.badlogic.gdx.math.Vector2;
 
 import us.thirdmillenium.strategicassaultsimulator.simulation.agents.*;
-import us.thirdmillenium.strategicassaultsimulator.simulation.tile.TileNode;
+import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileNode;
 import us.thirdmillenium.strategicassaultsimulator.simulation.graphics.GraphicsHelpers;
 import us.thirdmillenium.strategicassaultsimulator.simulation.graphics.Line;
 

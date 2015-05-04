@@ -24,10 +24,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.neuroph.core.NeuralNetwork;
-
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.Params;
-import us.thirdmillenium.strategicassaultsimulator.simulation.tile.TileNode;
+import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileNode;
 import us.thirdmillenium.strategicassaultsimulator.simulation.brains.Brain;
 import us.thirdmillenium.strategicassaultsimulator.simulation.brains.NeuralNetworkBrain;
 import us.thirdmillenium.strategicassaultsimulator.simulation.graphics.GraphicsHelpers;
