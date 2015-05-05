@@ -19,23 +19,33 @@ package us.thirdmillenium.strategicassaultsimulator.pathselect;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ai.pfa.GraphPath;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.HashSet;
+import java.util.concurrent.ConcurrentHashMap;
 
+import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileAStarPathFinder;
+import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileHeuristic;
 import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileNode;
+import us.thirdmillenium.strategicassaultsimulator.simulation.environment.Environment;
+import us.thirdmillenium.strategicassaultsimulator.simulation.graphics.GraphicsHelpers;
 
 
 public class PathSelection implements InputProcessor {
     // Other Variables
     private OrthographicCamera camera;
+    private int pathSelectionState = 1;
 
     // Path Variables
     private Array<TileNode> prefPath;
@@ -45,6 +55,14 @@ public class PathSelection implements InputProcessor {
     // The Tiled Map Assets for this Environment
     private TiledMap TiledMap;
     private TiledMapRenderer TiledMapRenderer;
+    private ConcurrentHashMap<Integer, TileNode> TraverseNodes;
+    private GraphPath<TileNode> TileNodeGraph;
+    private TileAStarPathFinder pathFinder;
+    private TileHeuristic heuristic;
+
+    // Draw Variables
+    private ShapeRenderer shapeRender;
+    private SpriteBatch spriteBatch;
 
 
 
@@ -54,6 +72,10 @@ public class PathSelection implements InputProcessor {
         this.camera.setToOrtho(false, 800, 1216);
         this.camera.update();
 
+        // Setup Renderers
+        this.shapeRender = new ShapeRenderer();
+        this.spriteBatch = new SpriteBatch();
+
         // Setup input (motion grabbing) processing
         Gdx.input.setInputProcessor(this);
 
@@ -62,9 +84,13 @@ public class PathSelection implements InputProcessor {
         this.TiledMap = new TmxMapLoader().load(levelPath);
         this.TiledMapRenderer = new OrthogonalTiledMapRenderer(this.TiledMap);
 
+        // Generate TileMap Objects
+        this.TraverseNodes = new ConcurrentHashMap<Integer, TileNode>();
+        this.TileNodeGraph = Environment.createGraphFromTileMap(this.TraverseNodes, (TiledMapTileLayer) this.TiledMap.getLayers().get(1));
+
         // Initialize Preferred Path
         this.prefPath = new Array<TileNode>();
-
+        this.prefPath.add(GraphicsHelpers.findTileNodeByScreenTouch(16, 1200, this.TraverseNodes));
 
     }
 
@@ -80,7 +106,27 @@ public class PathSelection implements InputProcessor {
         this.TiledMapRenderer.setView(this.camera);
         this.TiledMapRenderer.render();
 
+        switch( this.pathSelectionState ) {
+            case 0:
 
+                break;
+
+            case 1:
+                // Draw the Current Preferred Path
+                this.shapeRender.setProjectionMatrix(this.camera.combined);
+                this.shapeRender.begin(ShapeRenderer.ShapeType.Filled);
+                this.shapeRender.setColor(Color.CYAN);
+
+                if (this.prefPath.size > 1) {
+                    for (int i = 0; i < this.prefPath.size - 1; i++) {
+                        this.shapeRender.rectLine(this.prefPath.get(i + 1).getPixelX(), this.prefPath.get(i + 1).getPixelY(),
+                                this.prefPath.get(i).getPixelX(), this.prefPath.get(i).getPixelY(), 4);
+                    }
+                }
+
+                this.shapeRender.end();
+                break;
+        }
     }
 
 
@@ -103,7 +149,30 @@ public class PathSelection implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+
+        switch( this.pathSelectionState ) {
+            case 0:
+
+
+                break;
+
+            case 1:
+                this.pathFinder = new TileAStarPathFinder(null);
+                this.heuristic = new TileHeuristic();
+
+                TileNode lastPoint = this.prefPath.get(this.prefPath.size - 1);
+                TileNode touch = GraphicsHelpers.findTileNodeByScreenTouch(screenX, screenY, this.TraverseNodes);
+
+                Array<TileNode> partialPath = new Array<TileNode>(100);
+                this.pathFinder.searchNodePath2(lastPoint, touch, this.heuristic, partialPath);
+
+                for (int i = 1; i < partialPath.size; i++) {
+                    this.prefPath.add(partialPath.get(i));
+                }
+                break;
+        }
+
+        return true;
     }
 
     @Override
