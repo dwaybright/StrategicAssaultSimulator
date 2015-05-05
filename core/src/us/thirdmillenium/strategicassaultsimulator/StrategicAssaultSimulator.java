@@ -27,6 +27,7 @@
 package us.thirdmillenium.strategicassaultsimulator;
 
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.utils.Array;
@@ -49,6 +50,7 @@ public class StrategicAssaultSimulator extends ApplicationAdapter {
     private Environment MyEnvironment;
 
 
+
     // Startup Answers
     private int levelSelect;
     private int playerSelect;
@@ -57,10 +59,14 @@ public class StrategicAssaultSimulator extends ApplicationAdapter {
     // Other Variables
     private Random random;
     private AssetManager assman;
+    private Resources res;
+    private int nnID;
 
 
-    public StrategicAssaultSimulator(AssetManager assman) {
+    public StrategicAssaultSimulator(AssetManager assman, Resources res, int nnID) {
         this.assman = assman;
+        this.res = res;
+        this.nnID = nnID;
     }
 
 
@@ -83,14 +89,14 @@ public class StrategicAssaultSimulator extends ApplicationAdapter {
                     this.state = GAMESTATE.SELECTPATH;
 
                     // Collect Startup Settings and Kill object
-                    this.levelSelect  = this.startup.getLevelSelected();
+                    this.levelSelect  = this.startup.getLevelSelected() + 1;
                     this.playerSelect = this.startup.getPlayerController();
                     this.enemySelect  = this.startup.getEnemyController();
 
                     this.startup.dispose();
 
                     // Create a new PathSelection object
-                    this.pathselect = new PathSelection(this.levelSelect + 1);
+                    this.pathselect = new PathSelection(this.levelSelect);
                 }
 
                 break;
@@ -112,10 +118,12 @@ public class StrategicAssaultSimulator extends ApplicationAdapter {
 
                     // Collect Path
                     Array<TileNode> prefPath = this.pathselect.getPrefPath();
+                    int startLocID = this.pathselect.getStartLocID();
 
                     // Create Environment
                     this.MyEnvironment = new GameEnvironment(Params.PathToBaseNN, this.random, this.assman,
-                                                             this.levelSelect, prefPath);
+                                                             this.levelSelect, prefPath, this.res, this.nnID,
+                                                             this.playerSelect, this.enemySelect, startLocID);
 
                     // Dispose of Enviro
                     this.pathselect.dispose();
@@ -125,9 +133,26 @@ public class StrategicAssaultSimulator extends ApplicationAdapter {
 
             case SIMULATE:
                 this.MyEnvironment.simulate(1 / (float)10);
+
+                if( this.MyEnvironment.isEndSimulation() ) {
+                    this.state = GAMESTATE.LOGINSCREEN;
+
+                    this.startup = new Startup(this.assman);
+
+                    this.MyEnvironment.dispose();
+                }
+
                 break;
 
             default:
+                if(this.startup != null) {
+                    this.startup.dispose();
+                }
+
+                this.startup = new Startup(this.assman);
+
+                this.state = GAMESTATE.LOGINSCREEN;
+
                 break;
         }
 	}

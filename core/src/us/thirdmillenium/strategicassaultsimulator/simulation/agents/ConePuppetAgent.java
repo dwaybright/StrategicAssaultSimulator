@@ -149,6 +149,7 @@ public class ConePuppetAgent extends AgentModel {
             this.ALIVE = false;
             this.sprite = new Sprite(new Texture(Params.DeadAgentPNG));
             this.sprite.setCenter(this.position.x, this.position.y);
+            this.teamTracker.remove(this);
         } else {
             // Run!!!
             this.dangerOverride = true;

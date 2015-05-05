@@ -17,6 +17,7 @@ limitations under the License.
 package us.thirdmillenium.strategicassaultsimulator.simulation.agents;
 
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 
 import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
@@ -41,6 +42,7 @@ import us.thirdmillenium.strategicassaultsimulator.simulation.graphics.GraphicsH
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.GreenBullet;
 import us.thirdmillenium.strategicassaultsimulator.simulation.graphics.Line;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
@@ -95,10 +97,10 @@ public class ConeAgent extends AgentModel {
     public ConeAgent(Vector2 startPosition, float startAngle, int degreesOfView, int visionDepth, int health, String spritePNG,
                      Random random, Set<Line> collisionLines, String nnetPath, GraphPath<TileNode> prefPath, HashSet<TileNode> preferredPathNodeTracker,
                      TiledMap gameMap, Set<AgentModel> team, Set<AgentModel> enemies, Set<GreenBullet> bullets, ConcurrentHashMap<Integer, TileNode> mapNodes,
-                     AssetManager assman) {
+                     AssetManager assman, Resources res, int nnID) {
 
         // Agent Position and Movement Config
-        this.brain = new NeuralNetworkBrain(nnetPath, assman);
+        this.brain = new NeuralNetworkBrain(nnetPath, assman, res, nnID);
         this.preferredPathNodeTracker = preferredPathNodeTracker;
         this.preferredPath = prefPath;
         this.preferredPathIndex = 0;

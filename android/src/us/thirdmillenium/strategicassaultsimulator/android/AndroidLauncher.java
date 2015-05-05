@@ -30,6 +30,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+
 import us.thirdmillenium.strategicassaultsimulator.StrategicAssaultSimulator;
 
 
@@ -41,6 +42,6 @@ public class AndroidLauncher extends AndroidApplication {
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
-		initialize(new StrategicAssaultSimulator(getAssets()), config);
+		initialize(new StrategicAssaultSimulator(getAssets(), getResources(), R.raw.cone100_mlp4));
 	}
 }

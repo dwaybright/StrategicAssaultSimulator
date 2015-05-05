@@ -94,6 +94,23 @@ public abstract class GraphicsHelpers {
         return out;
     }
 
+    public static GraphPath<TileNode> getPrefPathDemo(HashSet<TileNode> prefPathNodeTracker, Array<TileNode> nodes) {
+        // Add all nodes to HashSet tracker for fast look-up later, deduping as we go
+        Iterator<TileNode> itr = nodes.iterator();
+
+        while(itr.hasNext()) {
+            TileNode tile = itr.next();
+
+            if( prefPathNodeTracker.contains(tile) ) {
+                itr.remove();
+            } else {
+                prefPathNodeTracker.add(tile);
+            }
+        }
+
+        // Return our new Graph Path
+        return new DefaultGraphPath<TileNode>(nodes);
+    }
 
 
     /**

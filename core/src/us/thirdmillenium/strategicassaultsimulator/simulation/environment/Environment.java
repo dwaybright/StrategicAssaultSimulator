@@ -65,6 +65,8 @@ public abstract class Environment {
     public abstract void dispose();
 
 
+    public abstract boolean isEndSimulation();
+
     /**
      * Generates a set of all lines describing collisions in the game map.
      *

@@ -28,7 +28,7 @@ public interface Params {
 
 
     /** Path to the base NN to be used by GA. */
-    static final String PathToBaseNN    = "data/Cone100_MLP4.nnet";
+    static final String PathToBaseNN    = "Cone100_MLP4.jet";
 
 
     /*

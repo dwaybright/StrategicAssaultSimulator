@@ -212,6 +212,10 @@ public class PathSelection implements InputProcessor {
         this.shapeRender.dispose();
     }
 
+    public int getStartLocID() {
+        return this.startLocID;
+    }
+
 
 
     @Override
@@ -238,11 +242,11 @@ public class PathSelection implements InputProcessor {
         switch( this.pathSelectionState ) {
             case 0:
                 // Store Starting
-                if( x < 100 && y < 100 ) {
+                if( x < 100 && y < 100 ) {  // Bottom Left
                     this.startSprite = this.bottomLeftSprite;
                     startSelected = true;
                     startLocID = 1;
-                } else if( x < 100 && y > 1116 ) {
+                } else if( x < 100 && y > 1116 ) {  // Top Left
                     this.startSprite = this.topLeftSprite;
                     startSelected = true;
                     startLocID = 2;

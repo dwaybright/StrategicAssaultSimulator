@@ -17,9 +17,11 @@ limitations under the License.
 package us.thirdmillenium.strategicassaultsimulator.simulation.environment;
 
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -37,6 +39,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -58,8 +61,12 @@ public class GameEnvironment extends Environment implements InputProcessor {
     private boolean NNET = true;
     //private float lastAngle = 0;
 
+    private boolean endSimulation = false;
+
     // File Asset Manager
     private AssetManager assman;
+    private Resources res;
+    private int nnID;
 
     // Bullet Tracker
     private Set<GreenBullet> BulletTracker;
@@ -99,7 +106,9 @@ public class GameEnvironment extends Environment implements InputProcessor {
      * The constructor takes in a "*.tmx" file, and converts to TileMap.
      * Also prepares LibGDX req'd graphical stuff.
      */
-    public GameEnvironment(String nnetPath, Random random, AssetManager assman, int testLevelID, Array<TileNode> rawPrefPath) {
+    public GameEnvironment(String nnetPath, Random random, AssetManager assman, int testLevelID,
+                           Array<TileNode> rawPrefPath, Resources res, int nnID, int playerSelect,
+                           int enemySelect, int playerStart) {
         // Screen width and height
         this.width  = 800;	//Gdx.graphics.getWidth();
         this.height = 1216;	//Gdx.graphics.getHeight();
@@ -107,6 +116,8 @@ public class GameEnvironment extends Environment implements InputProcessor {
 
         // AssetManager
         this.assman = assman;
+        this.res = res;
+        this.nnID = nnID;
 
         // The test level to display
         String levelPath = "TestLevel" + testLevelID + ".tmx";
@@ -138,13 +149,7 @@ public class GameEnvironment extends Environment implements InputProcessor {
         this.TraverseNodes = new ConcurrentHashMap<Integer, TileNode>();
         this.TileNodeGraph = createGraphFromTileMap(this.TraverseNodes, (TiledMapTileLayer) this.TiledMap.getLayers().get(1));
 
-        // Add a Training Shooter
-        this.shooters.add(new TrainingShooter(190,  630, this.trainees, this.shooters, this.BulletTracker, random));
-        this.shooters.add(new TrainingShooter(540,  700, this.trainees, this.shooters, this.BulletTracker, random));
-        this.shooters.add(new TrainingShooter(510,   90, this.trainees, this.shooters, this.BulletTracker, random));
-        this.shooters.add(new TrainingShooter( 65, 1090, this.trainees, this.shooters, this.BulletTracker, random));
-        this.shooters.add(new TrainingShooter(740, 1090, this.trainees, this.shooters, this.BulletTracker, random));
-        this.shooters.add(new TrainingShooter(410,  960, this.trainees, this.shooters, this.BulletTracker, random));
+
 
         int startX = 16;
         int startY = 16;
@@ -153,31 +158,33 @@ public class GameEnvironment extends Environment implements InputProcessor {
         int sign = 1;
 
 
-        switch(testLevelID) {
-            case 1:
+        switch(playerStart) {
+            case 1: // bottom left
                 startX = 16;
                 startY = 16;
                 sign = 1;
                 startAngle = 270;
 
                 break;
-            case 2:
-                startX = 784;
-                startY = 16;
-                sign = -1;
-                startAngle = 180;
-                break;
-            case 3:
-                startX = 784;
-                startY = 1200;
-                sign = -1;
-                startAngle = 90;
-                break;
-            case 4:
+            case 2:  // top left
                 startX = 16;
                 startY = 1200;
                 sign = 1;
                 startAngle = 225;
+
+                break;
+            case 3:  // bottom right
+                startX = 784;
+                startY = 16;
+                sign = -1;
+                startAngle = 180;
+
+                break;
+            case 4:  // top right
+                startX = 784;
+                startY = 1200;
+                sign = -1;
+                startAngle = 90;
                 break;
             case 5:
                 startX = 16;
@@ -187,27 +194,99 @@ public class GameEnvironment extends Environment implements InputProcessor {
                 break;
         }
 
-        // Add the Trainee
-        if( NNET ) { 
-        	/* this.trainees.add(new TrainingAgent(testLevelID, NeuralNetwork.createFromFile(nnetPath), startX, startY,
-                              this.TraverseNodes, random, this.TiledMap, this.trainees, this.shooters, this.BulletTracker)); */
+        // Add the Players
+        Vector2 startVector   = new Vector2(startX, startY);
+        int degreeVision      = 100;
+        int depthVision       = 4 * Params.MapTileSize;
+        int health            = 20;
+
+        switch( playerSelect ) {
+            case 0:
+                HashSet<TileNode> prefNodeTracker = new HashSet<TileNode>();
+                GraphPath<TileNode> prefPath = GraphicsHelpers.getPrefPathDemo(prefNodeTracker, rawPrefPath);
+
+                this.puppet = new ConePuppetAgent(startVector, startAngle, degreeVision, depthVision, health, Params.TrainingAgentLivePNG, false, random,
+                        this.collisionLines, prefPath, prefNodeTracker, this.TraverseNodes, this.TiledMap, this.trainees, this.shooters, this.BulletTracker);
+
+                this.trainees.add(this.puppet);
+
+                // Add Team members
+
+                HashSet<TileNode> prefNodeTracker2 = new HashSet<TileNode>();
+                GraphPath<TileNode> prefPath2 = GraphicsHelpers.getPrefPathDemo(prefNodeTracker2, rawPrefPath);
+
+                HashSet<TileNode> prefNodeTracker3 = new HashSet<TileNode>();
+                GraphPath<TileNode> prefPath3 = GraphicsHelpers.getPrefPathDemo(prefNodeTracker3, rawPrefPath);
+
+                HashSet<TileNode> prefNodeTracker4 = new HashSet<TileNode>();
+                GraphPath<TileNode> prefPath4 = GraphicsHelpers.getPrefPathDemo(prefNodeTracker4, rawPrefPath);
+
+
+                trainees.add(new ConePuppetAgent(new Vector2(startX + (sign * 40), startY), startAngle, degreeVision, depthVision, health, Params.TrainingAgentLivePNG, false, random,
+                        this.collisionLines, prefPath2, prefNodeTracker2, this.TraverseNodes, this.TiledMap, this.trainees, this.shooters, this.BulletTracker));
+
+
+                trainees.add(new ConePuppetAgent(new Vector2(startX + (sign * 80), startY), startAngle, degreeVision, depthVision, health, Params.TrainingAgentLivePNG, false, random,
+                        this.collisionLines, prefPath3, prefNodeTracker3, this.TraverseNodes, this.TiledMap, this.trainees, this.shooters, this.BulletTracker));
+
+
+                trainees.add(new ConePuppetAgent(new Vector2(startX + (sign * 120), startY), startAngle, degreeVision, depthVision, health, Params.TrainingAgentLivePNG, false, random,
+                        this.collisionLines, prefPath4, prefNodeTracker4, this.TraverseNodes, this.TiledMap, this.trainees, this.shooters, this.BulletTracker));
+
+
+                break;
+            case 1:
+
+                break;
+        }
+
+        switch(enemySelect) {
+            case 0:
+                // Add a Training Shooter
+                this.shooters.add(new TrainingShooter(190,  630, this.trainees, this.shooters, this.BulletTracker, random));
+                this.shooters.add(new TrainingShooter(540,  700, this.trainees, this.shooters, this.BulletTracker, random));
+                this.shooters.add(new TrainingShooter(510,   90, this.trainees, this.shooters, this.BulletTracker, random));
+                this.shooters.add(new TrainingShooter( 65, 1090, this.trainees, this.shooters, this.BulletTracker, random));
+                this.shooters.add(new TrainingShooter(740, 1090, this.trainees, this.shooters, this.BulletTracker, random));
+                this.shooters.add(new TrainingShooter(410,  960, this.trainees, this.shooters, this.BulletTracker, random));
+
+                break;
+
+            case 1:
+                this.shooters.add(new ConePuppetAgent(new Vector2(40, 600), startAngle, degreeVision, depthVision, 4, Params.ShootingAgentLivePNG, false, random,
+                        this.collisionLines, new DefaultGraphPath<TileNode>(new Array<TileNode>()), new HashSet<TileNode>(), this.TraverseNodes, this.TiledMap, this.shooters, this.trainees, this.BulletTracker));
+
+                break;
+
+            case 2:
+
+                break;
+        }
+
+
+
+
+
+/*        if( NNET ) {
+        	*//* this.trainees.add(new TrainingAgent(testLevelID, NeuralNetwork.createFromFile(nnetPath), startX, startY,
+                              this.TraverseNodes, random, this.TiledMap, this.trainees, this.shooters, this.BulletTracker)); *//*
 
             HashSet<TileNode> prefNodeTracker = new HashSet<TileNode>();
             GraphPath<TileNode> prefPath = GraphicsHelpers.getPrefPathTest(testLevelID, prefNodeTracker, this.TraverseNodes);
 
             this.trainees.add(new ConeAgent(new Vector2(startX, startY), startAngle, 100, 4 * Params.MapTileSize, 10, Params.TrainingAgentLivePNG,
                     random, this.collisionLines, nnetPath, prefPath, prefNodeTracker,
-                    this.TiledMap, this.trainees, this.shooters, this.BulletTracker, this.TraverseNodes, this.assman));
+                    this.TiledMap, this.trainees, this.shooters, this.BulletTracker, this.TraverseNodes, this.assman, this.res, this.nnID));
         }
 
         if( PUPPET ) {
             //this.puppet = new PuppetAgent(this.TiledMap, this.TraverseNodes, new TileAStarPathFinder(), startX, startY, this.BulletTracker, this.shooters);
 
-            Vector2 startVector   = new Vector2(startX, startY);
+            //Vector2 startVector   = new Vector2(startX, startY);
 
-            int degreeVision      = 100;
-            int depthVision       = 4 * Params.MapTileSize;
-            int health            = 20;
+            //int degreeVision      = 100;
+            //int depthVision       = 4 * Params.MapTileSize;
+            //int health            = 20;
 
             //HashSet<TileNode> tracker = new HashSet<TileNode>();
             //prefPath = new DefaultGraphPath<TileNode>(); //GraphicsHelpers.getPrefPathTest(testLevelID, tracker, this.TraverseNodes);
@@ -244,7 +323,7 @@ public class GameEnvironment extends Environment implements InputProcessor {
 
             //trainees.add(new ConePuppetAgent(new Vector2(startX + (sign * 120), startY), startAngle, degreeVision, depthVision, health, Params.TrainingAgentLivePNG, true, random,
             //        this.collisionLines, prefPath4, prefNodeTracker4, this.TraverseNodes, this.TiledMap, this.trainees, this.shooters, this.BulletTracker));
-        }
+        }*/
     }
 
 
@@ -461,24 +540,33 @@ public class GameEnvironment extends Environment implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        this.endSimulation = true;
+
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
-        System.out.println("Screen X: " + (screenX*2) + ", Y: " + (screenY*2));
+        /*System.out.println("Screen X: " + (screenX*2) + ", Y: " + (screenY*2));
         System.out.println("Game   X: " + (screenX*2) + ", Y: " + (this.height - (screenY*2)));
         System.out.println();
 
         if( PUPPET ) {
             this.puppet.setPathToGoal((2 * screenX), this.height - (2 * screenY));
-        }
+        }*/
+
+
 
         //TrainingAgent ta = new TrainingAgent(null, null, (screenX*2), ((38*32)-(screenY*2)), this.trainees, this.shooters, this.BulletTracker);
         //this.trainees.add(ta);
 
         return false;
+    }
+
+    @Override
+    public boolean isEndSimulation() {
+        return this.endSimulation;
     }
 
     @Override

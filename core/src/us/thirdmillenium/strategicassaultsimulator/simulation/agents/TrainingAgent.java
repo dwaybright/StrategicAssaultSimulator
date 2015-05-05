@@ -17,7 +17,9 @@ limitations under the License.
 package us.thirdmillenium.strategicassaultsimulator.simulation.agents;
 
 import android.content.res.AssetManager;
+import android.content.res.Resources;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;
@@ -76,13 +78,13 @@ public class TrainingAgent extends AgentModel {
 
 
     public TrainingAgent(int testLevelID, String nnetPath, int PixelX, int PixelY, ConcurrentHashMap<Integer, TileNode> traverseNodes, Random random,
-                         TiledMap tileMap, Set<AgentModel> trainees, Set<AgentModel> shooters, Set<GreenBullet> bullets, AssetManager assman) {
+                         TiledMap tileMap, Set<AgentModel> trainees, Set<AgentModel> shooters, Set<GreenBullet> bullets, AssetManager assman, Resources res, int nnID) {
         // Set Position and Location
         this.position = new Vector2(PixelX, PixelY);
         this.rotation = 270;
 
         // Load Neural Network
-        this.brain = new NeuralNetworkBrain(nnetPath, assman);
+        this.brain = new NeuralNetworkBrain(nnetPath, assman, res, nnID);
         //this.brain.randomWeights(random);
         this.random = random;
 
