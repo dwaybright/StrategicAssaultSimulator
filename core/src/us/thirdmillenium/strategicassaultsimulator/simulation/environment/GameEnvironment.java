@@ -41,6 +41,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 import us.thirdmillenium.strategicassaultsimulator.simulation.agents.*;
 import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileNode;
@@ -98,7 +99,7 @@ public class GameEnvironment extends Environment implements InputProcessor {
      * The constructor takes in a "*.tmx" file, and converts to TileMap.
      * Also prepares LibGDX req'd graphical stuff.
      */
-    public GameEnvironment(String nnetPath, Random random, AssetManager assman, int testLevelID) {
+    public GameEnvironment(String nnetPath, Random random, AssetManager assman, int testLevelID, Array<TileNode> rawPrefPath) {
         // Screen width and height
         this.width  = 800;	//Gdx.graphics.getWidth();
         this.height = 1216;	//Gdx.graphics.getHeight();

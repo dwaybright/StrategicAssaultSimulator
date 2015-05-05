@@ -49,6 +49,9 @@ public class PathSelection implements InputProcessor {
     private int pathSelectionState = 0;
     private int levelID;
 
+    private boolean returnToStartScreen = false;
+    private boolean readyToSimulate = false;
+
     // Path Variables
     private Array<TileNode> prefPath;
     private HashSet<TileNode> prefPathHashNodes;
@@ -69,6 +72,9 @@ public class PathSelection implements InputProcessor {
     private Sprite bottomRightSprite;
     private Sprite bottomLeftSprite;
     private Sprite startSprite;
+    private int startLocID;
+
+    private Sprite menuSprite;
 
     // Draw Variables
     private ShapeRenderer shapeRender;
@@ -110,6 +116,9 @@ public class PathSelection implements InputProcessor {
         this.topLeftSprite       = new Sprite(new Texture("PathSelect/startPoint.png"));
         this.bottomRightSprite   = new Sprite(new Texture("PathSelect/startPoint.png"));
         this.bottomLeftSprite    = new Sprite(new Texture("PathSelect/startPoint.png"));
+
+        this.menuSprite = new Sprite(new Texture("PathSelect/Menu.png"));
+        this.menuSprite.setCenter(400, 606);
 
         this.pickStartCornerText.setCenter(400, 606);
         this.topLeftSprite.setCenter    ( 32, 1184);
@@ -172,9 +181,36 @@ public class PathSelection implements InputProcessor {
                 this.spriteBatch.end();
 
                 break;
+
+            case 2:
+                // Draw Menu
+                this.spriteBatch.setProjectionMatrix(this.camera.combined);
+                this.spriteBatch.begin();
+
+                this.menuSprite.draw(this.spriteBatch);
+
+                this.spriteBatch.end();
+
+                break;
         }
     }
 
+    public Array<TileNode> getPrefPath() {
+        return this.prefPath;
+    }
+
+    public boolean isReadyToSimulate() {
+        return this.readyToSimulate;
+    }
+
+    public boolean isReturnToStartScreen() {
+        return this.returnToStartScreen;
+    }
+
+    public void dispose() {
+        this.spriteBatch.dispose();
+        this.shapeRender.dispose();
+    }
 
 
 
@@ -195,25 +231,28 @@ public class PathSelection implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        int x = screenX;
+        int y = 1216 - screenY;
+        boolean startSelected = false;
 
         switch( this.pathSelectionState ) {
             case 0:
-                int x = screenX;
-                int y = 1216 - screenY;
-                boolean startSelected = false;
-
                 // Store Starting
                 if( x < 100 && y < 100 ) {
                     this.startSprite = this.bottomLeftSprite;
                     startSelected = true;
+                    startLocID = 1;
                 } else if( x < 100 && y > 1116 ) {
                     this.startSprite = this.topLeftSprite;
                     startSelected = true;
+                    startLocID = 2;
                 } else if( x > 700 && y < 100 && this.levelID < 5) {
                     this.startSprite = this.bottomRightSprite;
+                    startLocID = 3;
                     startSelected = true;
                 } else if( x > 700 && y > 1116 && this.levelID < 5) {
                     this.startSprite = this.topRightSprite;
+                    startLocID = 4;
                     startSelected = true;
                 }
 
@@ -228,6 +267,27 @@ public class PathSelection implements InputProcessor {
                 break;
 
             case 1:
+
+                switch(startLocID) {
+                    case 1:
+                        if( x < 100 && y < 100 ) { startSelected = true; }
+                        break;
+                    case 2:
+                        if( x < 100 && y > 1116 ) { startSelected = true; }
+                        break;
+                    case 3:
+                        if( x > 700 && y < 100 && this.levelID < 5) { startSelected = true; }
+                        break;
+                    case 4:
+                        if( x > 700 && y > 1116 && this.levelID < 5) { startSelected = true; }
+                        break;
+                }
+
+                if(startSelected) {
+                    this.pathSelectionState = 2;
+                    return true;
+                }
+
                 this.pathFinder = new TileAStarPathFinder(null);
                 this.heuristic = new TileHeuristic();
 
@@ -240,6 +300,33 @@ public class PathSelection implements InputProcessor {
                 for (int i = 1; i < partialPath.size; i++) {
                     this.prefPath.add(partialPath.get(i));
                 }
+                break;
+
+            case 2:
+                if( x > 200 && x < 400) {
+                    if( y < 606 && y > 406 ) {
+                        // Simulate!
+                        this.readyToSimulate = true;
+                        return true;
+                    } else if ( y > 606 && y < 806 ) {
+                        // Reset Path
+                        this.prefPath.clear();
+                        this.pathSelectionState = 0;
+                        return true;
+                    }
+                } else if ( x > 400 && x < 600 ) {
+                    if( y < 606 && y > 406 ) {
+                        // Go Back
+                        this.returnToStartScreen = true;
+                        return true;
+                    } else if ( y > 606 && y < 806 ) {
+                        // Return to Path Making
+                        this.pathSelectionState = 1;
+                        return true;
+                    }
+                }
+
+
                 break;
         }
 

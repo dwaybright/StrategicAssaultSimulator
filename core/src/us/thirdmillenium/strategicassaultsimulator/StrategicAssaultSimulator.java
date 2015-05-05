@@ -29,10 +29,12 @@ package us.thirdmillenium.strategicassaultsimulator;
 import android.content.res.AssetManager;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.Random;
 
 import us.thirdmillenium.strategicassaultsimulator.pathselect.PathSelection;
+import us.thirdmillenium.strategicassaultsimulator.simulation.ai.tile.TileNode;
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.Environment;
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.GameEnvironment;
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.Params;
@@ -67,8 +69,6 @@ public class StrategicAssaultSimulator extends ApplicationAdapter {
         this.random = new Random();
         this.state = GAMESTATE.LOGINSCREEN;
         this.startup = new Startup(this.assman);
-
-        // this.MyEnvironment = new GameEnvironment(Params.PathToBaseNN, this.random, 3);
 	}
 
 
@@ -98,15 +98,33 @@ public class StrategicAssaultSimulator extends ApplicationAdapter {
             case SELECTPATH:
                 this.pathselect.draw();
 
+                if( this.pathselect.isReturnToStartScreen() ) {
+                    this.state = GAMESTATE.LOGINSCREEN;
 
+                    // Make new startup object
+                    this.startup = new Startup(this.assman);
+
+                    this.pathselect.dispose();
+                }
+
+                if( this.pathselect.isReadyToSimulate() ) {
+                    this.state = GAMESTATE.SIMULATE;
+
+                    // Collect Path
+                    Array<TileNode> prefPath = this.pathselect.getPrefPath();
+
+                    // Create Environment
+                    this.MyEnvironment = new GameEnvironment(Params.PathToBaseNN, this.random, this.assman,
+                                                             this.levelSelect, prefPath);
+
+                    // Dispose of Enviro
+                    this.pathselect.dispose();
+                }
 
                 break;
 
             case SIMULATE:
                 this.MyEnvironment.simulate(1 / (float)10);
-
-
-
                 break;
 
             default:
