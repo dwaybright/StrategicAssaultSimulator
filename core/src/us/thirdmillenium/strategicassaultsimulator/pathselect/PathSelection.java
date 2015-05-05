@@ -22,6 +22,7 @@ import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -45,7 +46,8 @@ import us.thirdmillenium.strategicassaultsimulator.simulation.graphics.GraphicsH
 public class PathSelection implements InputProcessor {
     // Other Variables
     private OrthographicCamera camera;
-    private int pathSelectionState = 1;
+    private int pathSelectionState = 0;
+    private int levelID;
 
     // Path Variables
     private Array<TileNode> prefPath;
@@ -60,6 +62,14 @@ public class PathSelection implements InputProcessor {
     private TileAStarPathFinder pathFinder;
     private TileHeuristic heuristic;
 
+    // Sprite Variables
+    private Sprite pickStartCornerText;
+    private Sprite topRightSprite;
+    private Sprite topLeftSprite;
+    private Sprite bottomRightSprite;
+    private Sprite bottomLeftSprite;
+    private Sprite startSprite;
+
     // Draw Variables
     private ShapeRenderer shapeRender;
     private SpriteBatch spriteBatch;
@@ -67,6 +77,8 @@ public class PathSelection implements InputProcessor {
 
 
     public PathSelection(int levelID) {
+        this.levelID = levelID;
+
         // Setup camera
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, 800, 1216);
@@ -90,8 +102,20 @@ public class PathSelection implements InputProcessor {
 
         // Initialize Preferred Path
         this.prefPath = new Array<TileNode>();
-        this.prefPath.add(GraphicsHelpers.findTileNodeByScreenTouch(16, 1200, this.TraverseNodes));
+        //this.prefPath.add(GraphicsHelpers.findTileNodeByScreenTouch(16, 1200, this.TraverseNodes));
 
+        // Sprites Setup
+        this.pickStartCornerText = new Sprite(new Texture("PathSelect/SelectCornerYellow.png"));
+        this.topRightSprite      = new Sprite(new Texture("PathSelect/startPoint.png"));
+        this.topLeftSprite       = new Sprite(new Texture("PathSelect/startPoint.png"));
+        this.bottomRightSprite   = new Sprite(new Texture("PathSelect/startPoint.png"));
+        this.bottomLeftSprite    = new Sprite(new Texture("PathSelect/startPoint.png"));
+
+        this.pickStartCornerText.setCenter(400, 606);
+        this.topLeftSprite.setCenter    ( 32, 1184);
+        this.topRightSprite.setCenter   (768, 1184);
+        this.bottomLeftSprite.setCenter ( 32,   32);
+        this.bottomRightSprite.setCenter(768,   32);
     }
 
 
@@ -108,7 +132,19 @@ public class PathSelection implements InputProcessor {
 
         switch( this.pathSelectionState ) {
             case 0:
+                this.spriteBatch.setProjectionMatrix(this.camera.combined);
+                this.spriteBatch.begin();
 
+                this.pickStartCornerText.draw(this.spriteBatch);
+                this.topLeftSprite.draw(this.spriteBatch);
+                this.bottomLeftSprite.draw(this.spriteBatch);
+
+                if(this.levelID < 5) {
+                    this.topRightSprite.draw(this.spriteBatch);
+                    this.bottomRightSprite.draw(this.spriteBatch);
+                }
+
+                this.spriteBatch.end();
                 break;
 
             case 1:
@@ -125,6 +161,16 @@ public class PathSelection implements InputProcessor {
                 }
 
                 this.shapeRender.end();
+
+
+                // Draw Start Graphic
+                this.spriteBatch.setProjectionMatrix(this.camera.combined);
+                this.spriteBatch.begin();
+
+                this.startSprite.draw(this.spriteBatch);
+
+                this.spriteBatch.end();
+
                 break;
         }
     }
@@ -152,7 +198,32 @@ public class PathSelection implements InputProcessor {
 
         switch( this.pathSelectionState ) {
             case 0:
+                int x = screenX;
+                int y = 1216 - screenY;
+                boolean startSelected = false;
 
+                // Store Starting
+                if( x < 100 && y < 100 ) {
+                    this.startSprite = this.bottomLeftSprite;
+                    startSelected = true;
+                } else if( x < 100 && y > 1116 ) {
+                    this.startSprite = this.topLeftSprite;
+                    startSelected = true;
+                } else if( x > 700 && y < 100 && this.levelID < 5) {
+                    this.startSprite = this.bottomRightSprite;
+                    startSelected = true;
+                } else if( x > 700 && y > 1116 && this.levelID < 5) {
+                    this.startSprite = this.topRightSprite;
+                    startSelected = true;
+                }
+
+
+                // Once selected, add first TileNode to preferred path, then change state
+                if(startSelected) {
+                    this.prefPath.add(GraphicsHelpers.findTileNodeByScreenTouch(screenX, screenY, this.TraverseNodes));
+                    this.pathSelectionState = 1;
+                    return true;
+                }
 
                 break;
 
