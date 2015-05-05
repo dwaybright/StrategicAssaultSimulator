@@ -184,6 +184,27 @@ public class Startup implements InputProcessor {
         drawPathInfo();
     }
 
+    public void dispose() {
+        this.shapeRenderer.dispose();
+        this.spriteBatch.dispose();
+    }
+
+    public boolean isReadyForPath() {
+        return this.readyForPath;
+    }
+
+    public int getLevelSelected() {
+        return this.chosenLevel;
+    }
+
+    public int getPlayerController() {
+        return this.chosenPlayer;
+    }
+
+    public int getEnemyController() {
+        return this.chosenEnemy;
+    }
+
     private void drawPathInfo() {
         // Draw Selection Rectangles
         this.shapeRenderer.setProjectionMatrix(this.camera.combined);

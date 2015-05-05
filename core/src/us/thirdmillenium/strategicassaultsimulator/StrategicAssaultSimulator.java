@@ -32,6 +32,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 
 import java.util.Random;
 
+import us.thirdmillenium.strategicassaultsimulator.pathselect.PathSelection;
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.Environment;
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.GameEnvironment;
 import us.thirdmillenium.strategicassaultsimulator.simulation.environment.Params;
@@ -41,10 +42,17 @@ import us.thirdmillenium.strategicassaultsimulator.startup.Startup;
 public class StrategicAssaultSimulator extends ApplicationAdapter {
     // State Control
     private GAMESTATE state;
-    private Environment MyEnvironment;
     private Startup startup;
+    private PathSelection pathselect;
+    private Environment MyEnvironment;
 
-    // Variables
+
+    // Startup Answers
+    private int levelSelect;
+    private int playerSelect;
+    private int enemySelect;
+
+    // Other Variables
     private Random random;
     private AssetManager assman;
 
@@ -71,14 +79,34 @@ public class StrategicAssaultSimulator extends ApplicationAdapter {
             case LOGINSCREEN:
                 this.startup.draw();
 
+                if( this.startup.isReadyForPath() ) {
+                    this.state = GAMESTATE.SELECTPATH;
+
+                    // Collect Startup Settings and Kill object
+                    this.levelSelect  = this.startup.getLevelSelected();
+                    this.playerSelect = this.startup.getPlayerController();
+                    this.enemySelect  = this.startup.getEnemyController();
+
+                    this.startup.dispose();
+
+                    // Create a new PathSelection object
+                    this.pathselect = new PathSelection(this.levelSelect + 1);
+                }
+
                 break;
 
             case SELECTPATH:
+                this.pathselect.draw();
+
+
 
                 break;
 
             case SIMULATE:
                 this.MyEnvironment.simulate(1 / (float)10);
+
+
+
                 break;
 
             default:
