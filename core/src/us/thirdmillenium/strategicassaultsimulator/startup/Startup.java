@@ -61,6 +61,12 @@ public class Startup implements InputProcessor {
     private Sprite enemyPuppet;
     private Sprite enemyNN;
 
+    // Path Variables
+    private boolean readyForPath = false;
+    private Rectangle[] pathSelectRects;
+    private Sprite readyPathText;
+
+
 
     public Startup(AssetManager assman) {
         // Setup camera
@@ -103,6 +109,58 @@ public class Startup implements InputProcessor {
         this.levelSelectRects[2].set(330, 904, 140, 192);
         this.levelSelectRects[3].set(480, 904, 140, 192);
         this.levelSelectRects[4].set(630, 904, 140, 192);
+
+        // Load Player Images
+        this.choosePlayerText = new Sprite(new Texture("LevelImages/choosePlayer.png"));
+        this.playerPuppet = new Sprite(new Texture("LevelImages/puppet.png"));
+        this.playerNN = new Sprite(new Texture("LevelImages/nnetPic.png"));
+
+        // Set Player Image Locations
+        this.choosePlayerText.setX(50);
+        this.choosePlayerText.setY(800);
+        this.playerPuppet.setCenter(150, 670);
+        this.playerNN.setCenter(400, 670);
+
+        // Setup Player Boxes
+        this.playerSelectRects = new Rectangle[2];
+
+        for( int i = 0; i < 2; i ++ )
+            this.playerSelectRects[i] = new Rectangle();
+
+        this.playerSelectRects[0].set(30, 550, 240, 240);
+        this.playerSelectRects[1].set(280, 550, 240, 240);
+
+        // Load Enemy Images
+        this.chooseEnemyText = new Sprite(new Texture("LevelImages/chooseEnemy.png"));
+        this.enemyStationary = new Sprite(new Texture("LevelImages/stationary.png"));
+        this.enemyPuppet = new Sprite(new Texture("LevelImages/puppet.png"));
+        this.enemyNN = new Sprite(new Texture("LevelImages/nnetPic.png"));
+
+        // Set Enemy Image Locations
+        this.chooseEnemyText.setX(50);
+        this.chooseEnemyText.setY(450);
+        this.enemyStationary.setCenter(150, 340);
+        this.enemyPuppet.setCenter(400, 340);
+        this.enemyNN.setCenter(650, 340);
+
+        // Setup Enemy Boxes
+        this.enemySelectRects = new Rectangle[3];
+
+        for( int i = 0; i < 3; i ++ )
+            this.enemySelectRects[i] = new Rectangle();
+
+        this.enemySelectRects[0].set(30, 220, 240, 240);
+        this.enemySelectRects[1].set(280, 220, 240, 240);
+        this.enemySelectRects[2].set(530, 220, 240, 240);
+
+        // Setup Path Box
+        this.readyPathText = new Sprite(new Texture("LevelImages/readyForPathText.png"));
+        this.readyPathText.setX(50);
+        this.readyPathText.setY(50);
+
+        this.pathSelectRects = new Rectangle[1];
+        this.pathSelectRects[0] = new Rectangle();
+        this.pathSelectRects[0].set(50, 50, 700, 95);
     }
 
 
@@ -117,13 +175,103 @@ public class Startup implements InputProcessor {
         drawLevelInfo();
 
         // Draw Player Type Selection
-
+        drawPlayerInfo();
 
         // Draw Enemy Type Selection
-
+        drawEnemyInfo();
 
         // Draw Ready for Path Selection
+        drawPathInfo();
+    }
 
+    private void drawPathInfo() {
+        // Draw Selection Rectangles
+        this.shapeRenderer.setProjectionMatrix(this.camera.combined);
+        this.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        for(int i = 0; i < 1; i++ ) {
+            this.shapeRenderer.setColor(Color.GREEN);
+
+            this.shapeRenderer.rect(this.pathSelectRects[i].getX(),
+                    this.pathSelectRects[i].getY(),
+                    this.pathSelectRects[i].getWidth(),
+                    this.pathSelectRects[i].getHeight());
+        }
+
+        this.shapeRenderer.end();
+
+        // Draw Images
+        this.spriteBatch.setProjectionMatrix(this.camera.combined);
+        this.spriteBatch.begin();
+
+        this.readyPathText.draw(this.spriteBatch);
+
+        this.spriteBatch.end();
+    }
+
+    private void drawEnemyInfo() {
+        // Draw Selection Rectangles
+        this.shapeRenderer.setProjectionMatrix(this.camera.combined);
+        this.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        for(int i = 0; i < 3; i++ ) {
+
+            if( this.chosenEnemy == i ) {
+                this.shapeRenderer.setColor(Color.GREEN);
+            } else {
+                this.shapeRenderer.setColor(Color.BLACK);
+            }
+
+            this.shapeRenderer.rect(this.enemySelectRects[i].getX(),
+                    this.enemySelectRects[i].getY(),
+                    this.enemySelectRects[i].getWidth(),
+                    this.enemySelectRects[i].getHeight());
+        }
+
+        this.shapeRenderer.end();
+
+        // Draw Images
+        this.spriteBatch.setProjectionMatrix(this.camera.combined);
+        this.spriteBatch.begin();
+
+        this.chooseEnemyText.draw(this.spriteBatch);
+        this.enemyStationary.draw(this.spriteBatch);
+        this.enemyPuppet.draw(this.spriteBatch);
+        this.enemyNN.draw(this.spriteBatch);
+
+        this.spriteBatch.end();
+    }
+
+    private void drawPlayerInfo() {
+        // Draw Selection Rectangles
+        this.shapeRenderer.setProjectionMatrix(this.camera.combined);
+        this.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        for(int i = 0; i < 2; i++ ) {
+
+            if( this.chosenPlayer == i ) {
+                this.shapeRenderer.setColor(Color.GREEN);
+            } else {
+                this.shapeRenderer.setColor(Color.BLACK);
+            }
+
+            this.shapeRenderer.rect(this.playerSelectRects[i].getX(),
+                    this.playerSelectRects[i].getY(),
+                    this.playerSelectRects[i].getWidth(),
+                    this.playerSelectRects[i].getHeight());
+        }
+
+        this.shapeRenderer.end();
+
+        // Draw Images
+        this.spriteBatch.setProjectionMatrix(this.camera.combined);
+        this.spriteBatch.begin();
+
+        this.choosePlayerText.draw(this.spriteBatch);
+        this.playerPuppet.draw(this.spriteBatch);
+        this.playerNN.draw(this.spriteBatch);
+
+        this.spriteBatch.end();
     }
 
     private void drawLevelInfo() {
@@ -176,37 +324,64 @@ public class Startup implements InputProcessor {
         return false;
     }
 
+    private int pointInRectangleChecker(Rectangle[] array, int x , int y) {
+        for(int i = 0; i < array.length; i++) {
+            if( x > array[i].getX()
+                    && x < array[i].getX() + array[i].getWidth()
+                    && y > array[i].getY()
+                    && y < array[i].getY() + array[i].getHeight())
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         System.out.println(screenX + ", " + screenY);
 
         int x = screenX;
         int y = 1216 - screenY;
+        int value = -1;
 
         // Check for Level Select Collision
-        for(int i = 0; i < 5; i++) {
-            if( x > this.levelSelectRects[i].getX()
-                && x < this.levelSelectRects[i].getX() + this.levelSelectRects[i].getWidth()
-                && y > this.levelSelectRects[i].getY()
-                && y < this.levelSelectRects[i].getY() + this.levelSelectRects[i].getHeight())
-            {
-                this.chosenLevel = i;
-            }
+        value = pointInRectangleChecker(this.levelSelectRects, x, y);
+
+        if( value >= 0 ) {
+            this.chosenLevel = value;
+            return true;
         }
 
         // Check for Player Type Selection
+        value = pointInRectangleChecker(this.playerSelectRects, x, y);
 
+        if( value >= 0 ) {
+            this.chosenPlayer = value;
+            return true;
+        }
 
 
         // Check for Enemy Type Selection
+        value = pointInRectangleChecker(this.enemySelectRects, x, y);
 
+        if( value >= 0 ) {
+            this.chosenEnemy = value;
+            return true;
+        }
 
 
         // Check for Go To Path Selection button
+        value = pointInRectangleChecker(this.pathSelectRects, x, y);
+
+        if( value >= 0 ) {
+            this.readyForPath = true;
+            return true;
+        }
 
 
-
-        return true;
+        return false;
     }
 
     @Override
