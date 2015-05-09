@@ -1,7 +1,9 @@
 # Strategic Assault Simulator
-An Android simulation game that relies on Neural Network controlled Agents, with extensive use of ![LibGDX] (https://github.com/libgdx/libgdx).
+A 2d strategic room clearing game.  The objective is to provide the overall attack strategy for your assault team.  From there, your team must rely on their skill level and your guidance to carry out a simulated attack.  Your assault team and the occupying enemy force will both utilize genetic algorithms to tweak artificial neural networks which will be used to control the Agents during the simulation.
 
-This branch builds the basic architecture for the entire simulation, and a testbed for running different neural networks.
+Graphics rely on ![LibGDX] (https://github.com/libgdx/libgdx).
+
+This branch is the build used during App Demo day.  Currently Neuroph libraries are causing issues with internal logging libraries, so Nueral Net Agents are in trouble.
 
 Visit the ![Desktop Trainer](https://github.com/dwaybright/SAS-DesktopTrainer) to see current method for neural network agent training!
 
@@ -28,3 +30,6 @@ Example of Interface Component in Action
 (3) Browse to cloned repository directory on your computer and select the build.gradle file in the root directory.  
 
 (4) This should build the project.  Once complete, run in emulator or attached device!
+
+# Requirements
+An Android 4.1+ device with a screen resolution of 1280x800.  The more Process/Ram available, the better the performance.
